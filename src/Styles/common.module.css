@@ -1,0 +1,193 @@
+.Panera_common_title_row {
+    background:var(--panera_dark_green);
+    display: flex;
+}
+.Panera_common_title {
+    padding:10px;
+    font-family:Roboto;
+    font-weight:900;
+    font-size:1.4rem;
+    text-align: left;
+    text-transform: uppercase;
+    color:var(--panera_white);
+}
+
+.Panera_dropdown {
+    width: fit-content;
+}
+
+.Panera_common_date_container {
+    display:flex;
+    justify-content: right;
+    align-items: center;
+    margin-right: 50px;
+}
+
+.Panera_common_dropdown_toggle{
+    border:none;
+    outline:solid 1px var(--panera_yellow);
+    padding:6px;
+    background-color:var(--panera_dark_green);
+    margin:10px;
+    text-align: right;
+    border-radius:5px;
+    font-family:Roboto;
+    font-size:0.8rem;
+    font-weight:600;
+    color:var(--panera_white);
+    cursor:pointer;
+    caret-color: transparent;
+}
+.Panera_common_dropdown_toggle:hover{
+    background-color:rgba(87, 108, 29,0.8);
+    outline:solid 1px var(--panera_white);
+}
+
+.Panera_common_dropdown_toggle:focus{
+    background-color:rgba(87, 108, 29,0.8);
+    outline:solid 1px var(--panera_white);
+}
+.Panera_common_dropdown_menu{
+    background-color:var(--panera_yellow);
+    text-transform:uppercase;
+    animation-name:opacity_change;
+    animation-duration:0.3s;
+    font-weight:600;
+    font-size:0.8rem;
+    color: var(--panera_dark_green);
+}
+
+.Panera_common_dropdown_item {
+    color: var(--panera_dark_green);
+    font-weight:600;
+    font-size:0.8rem;
+}
+.Panera_common_dropdown_item_active {
+    color: var(--panera_white);
+    background-color: var(--panera_dark_green);
+}
+.Panera_common_dropdown_item:hover {
+    color: var(--panera_yellow);
+    background-color: var(--panera_dark_green);
+}
+
+.Panera_common_excel_download_btn {
+    border:none;
+    background-color:var(--panera_dark_green);
+    color:var(--panera_white);
+    text-transform:uppercase;
+    font-size:0.8rem;
+    font-family:Roboto;
+    margin:10px;
+    padding:6px;
+    outline:solid 1px var(--panera_yellow);
+    font-weight:600;
+}
+.Panera_common_excel_download_btn:hover {
+    border:none;
+    background-color:var(--panera_dark_green);
+    outline:solid 1px var(--panera_white);
+}
+.Panera_common_excel_icon {
+    fill: var(--panera_white);
+    margin-right:3px;
+}
+.Panera_common_toast {
+    position:fixed;
+    right:2px;
+    top:2px;
+    z-index:10000;
+    opacity: 1;
+}
+.Panera_common_toast_header_success {
+    background-color: var(--panera_dark_green);
+    color: var(--panera_white);
+    font-family:Roboto;
+    font-size:0.9rem;
+    line-height:1.4rem;
+    font-weight:900;
+}
+
+.Panera_common_toast_body_success {
+    background-color:var(--panera_white);
+    color:#000;
+    font-weight:600;
+    font-family:Roboto;
+    font-size:0.8rem;
+}
+
+.Panera_common_toast_header_failure {
+    background-color: var(--panera_red);
+    color: var(--panera_white);
+    font-family:Roboto;
+    font-size:0.9rem;
+    line-height:1.4rem;
+    font-weight:900;
+}
+
+.Panera_common_toast_body_failure {
+    background-color:var(--panera_white);
+    color:#000;
+    font-weight:600;
+    font-family:Roboto;
+    font-size:0.8rem;
+}
+@keyframes animate_toast {
+    from {opacity:0;}
+    to {opacity:1;}
+}
+
+.search-container {
+    display:flex;
+    flex-direction: column;
+}
+
+.loadingSpinner { 
+    margin: auto;
+    width: 50%;
+    border: 3px solid green;
+    padding: 10px;
+}
+
+.spinner {
+    position: absolute;
+    
+}
+
+.Panera_common_excel_import_btn {
+    display: none;
+}
+
+.Panera_common_import_label {
+    color: white;
+    font-size:0.8rem;
+    font-family:Roboto;
+    margin:3px;
+    padding:6px;
+    font-weight:600;
+    background-color: var(--panera_dark_green);
+    border: solid 1px;
+}
+
+.Panera_common_import_label:hover {
+    background-color: var(--panera_dark_green);
+    border: solid 1px var(--panera_white);
+}
+
+.Panera_common_import_button { 
+    border: none;
+    
+}
+
+.Panera_common_table {
+    border-radius: 20px;
+    height: 500px;
+    width: 800px;
+    padding: 0 10px 10px 10px;
+    overflow: scroll;
+}
+
+.Panera_common_modal {
+    height: 1000px;
+    width: 2000px;
+}

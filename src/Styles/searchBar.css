@@ -1,0 +1,72 @@
+.input-wrapper {
+    background-color: white;
+    border-radius: 6px;
+    width: 90%;
+    height: 2.0rem;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+}
+
+.icon {
+    margin: 2px;
+    color: rgb(87, 108, 29);
+}
+.icon:hover {
+    cursor: pointer;
+}
+
+input {
+    margin-left: 5px;
+    border: none;
+    font-size: 1rem;
+    color: rgb(87, 108, 29);
+    width: 100%;
+}
+
+input:focus {
+    outline: none;
+}
+
+.resultsList {
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    border-radius: 6px 6px;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    overflow: auto;
+    max-height: 100px;
+    position: absolute;
+    width: 27%;
+}
+
+.listButton{
+    padding: 5px 5px;
+    font-family: Roboto;
+    font-size: 0.8rem;
+}
+
+.listButton:hover {
+    background-color: rgb(87, 108, 29);
+    cursor: pointer;
+    color: white;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+  }
+   
+
+::-webkit-scrollbar-thumb {
+    background: rgb(104, 111, 18); 
+  }
+  
+::-webkit-scrollbar-thumb:hover {
+    background: rgb(87, 108, 29); 
+  }

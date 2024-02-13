@@ -1,0 +1,199 @@
+:root {
+  --panera_green: rgb(104, 111, 18);
+  --panera_dark_green: rgb(87, 108, 29);
+  --panera_yellow: #ecd283;
+  --panera_brown: rgb(48, 9, 0);
+  --panera_white: rgb(255, 255, 255);
+  --panera_light_green: rgb(224, 235, 96);
+  --panera_black: #000;
+  --panera_red: #ed6167;
+}
+/*Dates*/
+
+.react-datepicker__calendar-icon {
+  width: 2em;
+  height: 3em;
+  margin-left: 0.5em;
+  vertical-align: 10em;
+  fill: var(--panera_white);
+}
+.Panera_datepicker_input {
+  border: none;
+  outline: 1px solid var(--panera_yellow);
+  padding: 6px;
+  background-color: var(--panera_dark_green);
+  margin: 10px;
+  text-align: center;
+  border-radius: 5px;
+  font-family: Roboto;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--panera_white);
+  cursor: pointer;
+  caret-color: transparent;
+}
+.Panera_datepicker_input::placeholder {
+  color: var(--panera_white);
+  text-align:center;
+  padding-left: 16px;
+}
+.Panera_datepicker_input:hover {
+  outline: 1px solid var(--panera_white);
+  background-color: rgba(87, 108, 29, 0.8);
+}
+.Panera_datepicker_input:active {
+  outline: 1px solid var(--panera_white);
+}
+.Panera_datepicker_input:focus {
+  outline: 1px solid var(--panera_white);
+}
+.Panera_datepicker
+  .react-datepicker-popper[data-placement^="bottom"]
+  .react-datepicker__triangle::after {
+  border-bottom-color: var(--panera_dark_green);
+}
+.Panera_datepicker .react-datepicker__month {
+  padding: 5px;
+  margin: 0px;
+}
+.Panera_datepicker .react-datepicker__header {
+  background-color: var(--panera_dark_green);
+  color:var(--panera_white);
+}
+.Panera_datepicker .react-datepicker__current-month {
+  font-family: Roboto;
+  font-size: 1rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: var(--panera_yellow);
+}
+.Panera_datepicker .react-datepicker__day-name {
+  font-family: Roboto;
+  font-size: 1rem;
+  font-weight: 900;
+  color: var(--panera_white);
+}
+
+.Panera_datepicker_day {
+  background-color: var(--panera_dark_green);
+  color: var(--panera_white);
+  font-family: Roboto;
+  font-size: 0.8rem;
+  font-weight: bold;
+  border-radius: 5px;
+}
+
+.Panera_datepicker_day:hover {
+  background-color: rgba(87, 108, 29, 0.7);
+  color: var(--panera_white);
+  font-family: Roboto;
+  font-size: 0.8rem;
+  font-weight: bold;
+  border-radius: 5px;
+}
+.react-datepicker__day--disabled {
+  cursor: default;
+  background-color: rgba(128, 128, 128,0.4);
+}
+
+.react-datepicker__day--disabled:hover {
+  cursor: default;
+  background-color: rgba(128, 128, 128,0.4);
+}
+
+.react-datepicker__view-calendar-icon input {
+  padding: 6px 0px 7px 0px;
+}
+@keyframes opacity_change {
+  from {
+    opacity: 0.5;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.react-datepicker {
+  opacity: 1;
+  animation-name: opacity_change;
+  animation-duration: 0.3s;
+}
+.react-datepicker-popper[data-placement^="bottom"]
+  .react-datepicker__triangle::before,
+.react-datepicker-popper[data-placement^="bottom"]
+  .react-datepicker__triangle::after {
+    border-bottom-color:var(--panera_dark_green);
+}
+
+.react-datepicker__year-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: unset!important;
+}
+.react-datepicker__year .react-datepicker__year-text{
+  background-color: var(--panera_dark_green);
+  color:var(--panera_white);
+  border-radius: 5px;
+}
+.react-datepicker__year-text--selected {
+  background-color:var(--panera_yellow)!important;
+  color:var(--panera_black)!important;
+}
+
+input[type="text"] {
+  background-color: var(--panera_dark_green);
+}
+
+.Panera_panera_daterange::placeholder {
+  color: var(--panera_white);
+  text-align:center;
+  padding-left: 16px;
+}
+
+.Panera_panera_daterange {
+  border: none;
+  outline: 1px solid var(--panera_yellow);
+  padding: 6px;
+  width:200px;
+  background-color: var(--panera_dark_green);
+  margin: 10px;
+  margin-right: 30px;
+  text-align: center;
+  border-radius: 5px;
+  font-family: Roboto;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--panera_white);
+  cursor: pointer;
+  caret-color: transparent;
+}
+
+.Panera_panera_daterange:hover {
+  outline: 1px solid var(--panera_white);
+  background-color: rgba(87, 108, 29, 0.8);
+}
+
+.Panera_panera_daterange:focus {
+  outline: 1px solid var(--panera_white);
+}
+
+.Panera_panera_daterange:active {
+  outline: 1px solid var(--panera_white);
+}
+
+.calenderIcon {
+  color: var(--panera_white);
+  position: relative;
+  left: 38px;
+}
+
+.dateRange { 
+  position: absolute;
+  top: 130px;
+  left: 900px;
+  background-color: var(--panera_white);
+}
+
+.iconAndDateRange {
+  display: flex;
+  align-items: center;
+}

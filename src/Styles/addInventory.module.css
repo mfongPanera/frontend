@@ -1,0 +1,138 @@
+:root{
+    --panera_green:rgb(104, 111, 18);
+    --panera_dark_green:rgb(87, 108, 29);
+    --panera_yellow:rgb(236, 210, 131);
+    --panera_brown: rgb(48, 9, 0);
+    --panera_white:#fff;
+    --panera_light_green: rgb(224, 235, 96);
+    --panera_black:#000;
+}
+
+.formContainer {
+    border: 3px solid;
+    border-color: var(--panera_dark_green);
+    border-radius: 10px;
+    margin: auto;
+    width: 90%;
+    padding: 15px;
+    margin-top: 40px;
+    background-color: #DFCFBE
+}
+
+.formGroups {
+    margin: 5px;
+    padding: 5px;
+}
+
+.formLabels{
+    color: var(--panera_green);
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-weight: bold;
+}
+
+.resetButton {
+    background-color: var(--panera_dark_green);
+    margin-left: 20px;
+    border-color: var(--panera_dark_green);
+}
+
+.resetButton:hover {
+    background-color: var(--panera_dark_green);
+} 
+
+.input_row {
+    padding:5px 5px 5px 5px;
+    height:100%;
+    margin:0;
+    margin-bottom:8px;
+    width:100%;
+    caret-color: var(--panera_dark_green);
+    border-radius:5px 5px 5px 5px; 
+    position: relative;
+}
+
+.input_row_value {
+    font-weight:400;
+    font-family:Roboto;
+    font-size:0.9rem;
+    color:var(--panera_dark_green);
+    
+}
+
+.input_label {
+    background-color: var(--panera_dark_green);
+    color:var(--panera_white);
+    font-size:0.9rem;
+    padding-bottom:2px;
+    padding-top:2px;
+    font-family:Roboto;
+    font-weight:600;
+    width:95%;
+    border-radius:5px 5px 5px 5px; 
+    text-align:center;
+}
+
+.form_row {
+    justify-content: center;
+    align-items: center;
+    margin:0;
+}
+
+.input_col {
+    padding-right: 0px;
+    padding-left:0px;
+    margin:0;
+}
+
+.onHandInventory {
+    color: var(--panera_white);
+    background-color: var(--panera_dark_green);
+    border-radius: 5px;
+    font-family: Roboto;
+    font-weight:600;
+    text-align: center;
+    margin-top: 15px;
+    margin-bottom: 10px;
+    padding: 5px;
+}
+
+.itemDetails {
+    color: var(--panera_white);
+    background-color: var(--panera_dark_green);
+    border-radius: 5px;
+    font-family: Roboto;
+    font-weight:600;
+    text-align: center;
+    margin-bottom: 10px;
+    padding: 5px;    
+}
+
+.field_rows {
+    margin-bottom: 15px;
+}
+
+.input_tooltip {
+    font-weight: bold;
+    background-color: salmon;
+    color: red;
+    position: absolute;
+    top: 43px;
+    left: 12px;
+    height: 27px;
+    width: fit-content;
+    text-align: center;
+}
+
+.input_tooltip_good {
+    top: 43px;
+    left: 12px;
+    height: 27px;
+    width: fit-content;
+    text-align: center;
+    color: var(--panera_white);
+    font-weight: bold;
+}
+
+.submitResetButtons {
+    margin-top: 20px;
+}

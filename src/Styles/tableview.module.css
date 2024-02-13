@@ -1,0 +1,52 @@
+:root {
+  --panera_green: rgb(104, 111, 18);
+  --panera_dark_green: rgb(87, 108, 29);
+  --panera_yellow: rgb(236, 210, 131);
+  --panera_brown: rgb(48, 9, 0);
+  --panera_white: #fff;
+  --panera_light_green: rgb(224, 235, 96);
+  --panera_black: #000;
+}
+
+.Panera_table_view_container {
+  opacity: 1;
+  animation-name: opacity_change;
+  animation-duration: 0.5s;
+  height: calc(100vh - 71px);
+  width: 100%;
+}
+
+.Panera_table_view_header {
+  font-size: 0.7rem;
+  font-family: Roboto;
+  text-align: center;
+}
+
+.Panera_table_view_body {
+  font-size: 0.7rem;
+  font-family: Roboto;
+  text-align: center;
+}
+
+.Panera_table_view_filler_container {
+  height: calc(100vh - 71px - 53.6px);
+  overflow: auto;
+  background-color: var(--panera_yellow);
+  width:100%;
+}
+
+
+.Panera_table_view_inventory_filler_row {
+    height:100%;
+    align-items:center;
+}
+
+.Panera_table_view_inventory_filler_row_content {
+    color: var(--panera_dark_green);
+    font-size:1.1rem;
+    line-height:1.8rem;
+    font-family:Roboto;
+    font-weight:600;
+    margin-top: 20px;
+    justify-content:center;
+}
