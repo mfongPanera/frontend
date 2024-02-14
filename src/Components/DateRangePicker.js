@@ -11,6 +11,7 @@ import {
   setInstructions,
   clearSelectedData
 } from "../app/dataReducer";
+import styles from "./../Styles/dateRangePicker.module.css";
 
 function DateRangePicker() {
   const shop = 'Panera'
@@ -86,11 +87,12 @@ function DateRangePicker() {
 
   return(
     <div>
-        <div ref={refOne}  className="iconAndDateRange">
-            <FontAwesomeIcon icon={faCalendar} className="calenderIcon"></FontAwesomeIcon>
+        <div ref={refOne}  className={`${styles["dateRangeIcon"]}`}>
+            <FontAwesomeIcon icon={faCalendar} className={`${styles["iconCalender"]}`}></FontAwesomeIcon>
             <input onClick={handleOpenDateRange} 
-            className ={`${shop}_panera_daterange`}  value={inputValue} type="text" readOnly/> 
-        {openDateRange && <DateRange
+            className ={`${styles['dateRangePickerInput']}`} value={inputValue} type="text" readOnly/> 
+        </div>
+        {openDateRange && <div><DateRange
                 editableDateInputs={true}
                 onChange={(item) => setRange([item.selection])}
                 moveRangeOnFirstSelection={false}
@@ -98,9 +100,8 @@ function DateRangePicker() {
                 rangeColors={[`rgb(87, 108, 29)`]}
                 startDatePlaceholder="Select Start Date"
                 endDatePlaceholder="Select End Date"
-                className="dateRange"
-        />}
-        </div>
+                className={`${styles['dateRangeCSS']}`}
+        /></div>}
     </div>
   )
 }

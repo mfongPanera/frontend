@@ -1,0 +1,47 @@
+.dateRangePickerInput {
+    border: none;
+    outline: 1px solid var(--panera_yellow);
+    padding: 6px;
+    width:200px;
+    background-color: var(--panera_dark_green);
+    margin: 10px;
+    margin-right: 30px;
+    text-align: center;
+    border-radius: 5px;
+    font-family: Roboto;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--panera_white);
+    cursor: pointer;
+    caret-color: transparent;
+}
+
+.dateRangePickerInput:hover {
+    outline: 1px solid var(--panera_white);
+    background-color: rgba(87, 108, 29, 0.8);
+}
+
+.dateRangePickerInput:focus {
+    outline: 1px solid var(--panera_white);
+}
+
+.dateRangePickerInput:active {
+    outline: 1px solid var(--panera_white);
+}
+
+.dateRangeIcon {
+    display: flex;
+    align-items: center;
+}
+
+.iconCalender{
+    color: var(--panera_white);
+    position: relative;
+    left: 38px;
+}
+
+.dateRangeCSS{
+    background-color: var(--panera_white);
+    position: absolute;
+    margin-top: 10px;
+}
