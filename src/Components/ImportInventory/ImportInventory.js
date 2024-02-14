@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styles from "./../../Styles/detailedview.module.css";
+import styles from "./../../Styles/importData.module.css";
 import { Button, Col, Container, Modal, ModalBody, ModalFooter, ModalHeader, ModalTitle, Row, Table } from "react-bootstrap";
 import ToastMessage from "../Toast";
 import FiltersTab from "../FiltersTab";
@@ -33,7 +33,7 @@ function ImportInventory() {
           },
           body:JSON.stringify(dataToDB)
         });
-        if(response.status.toString() == "200") {
+        if(response.status.toString() === "200") {
           setModalMessage("Data Inserted Succesfully");
         } else {
           setModalMessage("Error: Data Not Inserted Into DataBase");
@@ -99,9 +99,11 @@ function ImportInventory() {
                 </tbody>
               </Table>
             </div>
-            <Button onClick={()=>handleInsertButtonClick()} className={`${styles[`${shop}_insert_button`]}`}>
-              INSERT
-            </Button>
+            <div className={`${styles[`${shop}_button_container`]}`}>
+              <Button onClick={()=>handleInsertButtonClick()} className={`${styles[`${shop}_insert_button`]}`}>
+                INSERT
+              </Button>
+            </div>
           </Container>
         )
     }

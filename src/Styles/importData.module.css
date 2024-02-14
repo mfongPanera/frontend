@@ -1,0 +1,75 @@
+.Panera_table_container {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.Panera_table_div {
+    height: 80vh;
+    width: auto;
+    overflow: scroll;
+    margin-top: 10px;
+}
+
+.Panera_table_div thead th {
+    position: sticky;
+    top: -1px;
+}
+
+.Panera_table_headings {
+    font-size: 0.8rem;
+    font-family: Roboto;
+    font-weight: bold;
+}
+
+.Panera_table_column_values {
+    font-size: 0.8rem;
+    font-family: Roboto;
+}
+
+.Panera_button_container{
+    display: flex;
+    justify-content: right;
+}
+.Panera_insert_button {
+    border-color: var(--panera_green);
+    background-color: var(--panera_green);
+    font-size: 0.8rem;
+    font-family: Roboto;
+    width: 90px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.Panera_insert_button:hover {
+    background-color: var(--panera_green);
+    border-color: var(--panera_green);
+}
+
+.Panera_detailed_view_inventory_filler_container {
+    height:calc(100vh - 71px - 53.6px);
+    overflow: auto;
+    background-color: var(--panera_yellow);
+}
+
+.Panera_detailed_view_inventory_filler_row {
+    height:100%;
+    align-items:center;
+}
+
+.Panera_import_invenoty_text {
+    color: var(--panera_dark_green);
+    font-size:1.1rem;
+    line-height:1.8rem;
+    font-family:Roboto;
+    font-weight:600;
+    margin-top: 30px;
+    text-align: center;
+}
+
+.Panera_detailed_view_container {
+    opacity:1;
+    animation-name:opacity_change;
+    animation-duration:0.5s;
+    height:calc(100vh - 71px);
+    width:100%;
+}

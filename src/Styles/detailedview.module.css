@@ -441,17 +441,6 @@ button:focus:not(focus-visible) {
     justify-content:center;
 }
 
-.Panera_import_invenoty_text {
-    margin-left: 220px;
-    color: var(--panera_dark_green);
-    font-size:1.1rem;
-    line-height:1.8rem;
-    font-family:Roboto;
-    font-weight:600;
-    margin-top: 30px;
-    justify-content:center;
-}
-
 .Panera_detailed_view_add_button {
     height:35px;
     width:35px;
@@ -489,45 +478,3 @@ button:focus:not(focus-visible) {
     margin-top: 20px;
     text-align:center;
 }
-
-.Panera_table_headings {
-    font-size: 0.8rem;
-    font-family: Roboto;
-    font-weight: bold;
-}
-.Panera_table_column_values {
-    font-size: 0.8rem;
-    font-family: Roboto;
-}
-.Panera_table_container {
-    margin-left: 30px;
-}
-
-.Panera_insert_button {
-    border-color: var(--panera_green);
-    float: right;
-    background-color: var(--panera_green);
-    font-size: 0.8rem;
-    font-family: Roboto;
-    width: 90px;
-    margin-bottom: 10px;
-    margin-top: 10px;
-}
-
-.Panera_insert_button:hover {
-    background-color: var(--panera_green);
-    border-color: var(--panera_green);
-}
-
-.Panera_table_div {
-    height: 470px;
-    width: 1250px;
-    overflow: scroll;
-    margin-top: 10px;
-}
-
-.Panera_table_div thead th {
-    position: sticky;
-    top: -1px;
-}
-
