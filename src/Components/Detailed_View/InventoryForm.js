@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import Container from "react-bootstrap/Container";
 import Image from "react-bootstrap/Image";
 import Row from "react-bootstrap/Row";
@@ -43,7 +43,6 @@ function InventoryForm() {
   const adjusted_order_ = useSelector(
     (state) => state.dataReducer.adjustedOrder
   );
-  const selectedDate = useSelector((state) => state.dataReducer.selectedDate);
   const openOrders = useSelector((state) => state.dataReducer.openOrders);
   const adjustedPar = useSelector((state) => state.dataReducer.adjustedPar);
   const case_ = useSelector((state) => state.dataReducer.case_);
@@ -81,9 +80,8 @@ function InventoryForm() {
       }
     }
   }, [selectedData]);
+
   const tryRequire = () => {
-    console.log("selectedData")
-    console.log(selectedData)
     try {
       return require(`./../images/${selectedData.location_}/${selectedData.vendor_id}.jpg`);
     } catch (err) {
@@ -1308,255 +1306,140 @@ function InventoryForm() {
                     TOTAL CALCULATED ON-HAND
                   </Col>
             </Row>
-            <Row
-            className={`${
-              styles[`${shop}_detailed_view_inventory_form_row`]
-            }`}
-            >
-              <Col xl={1} md={6}  style={{justifyContent:"center",borderRadius:"5px"}}
-              className={`${
-                styles[`${shop}_detailed_view_inventory_form_label`]
-              }`}>CASES</Col>
-              <Col xl={1} md={6}  style={{justifyContent:"center",borderRadius:"5px"}}
-              className={`${
-                styles[`${shop}_detailed_view_inventory_form_label`]
-              }`}>BAGS</Col>
-              <Col xl={1} md={6}  style={{justifyContent:"center",borderRadius:"5px"}}
-              className={`${
-                styles[`${shop}_detailed_view_inventory_form_label`]
-              }`}>EACH</Col>
-              <Col xl={1} md={6}  style={{justifyContent:"center",borderRadius:"5px"}}
-              className={`${
-                styles[`${shop}_detailed_view_inventory_form_label`]
-              }`}>TRAY</Col>
-              <Col xl={2} md={6} style={{justifyContent:"center",borderRadius:"5px"}}
-              className={`${
-                styles[`${shop}_detailed_view_inventory_form_label`]
-              }`}>
-                SLEEVES
-              </Col>
-              <Col xl={1} md={6} style={{justifyContent:"center",borderRadius:"5px"}}
-                className={`${
-                  styles[`${shop}_detailed_view_inventory_form_label`]
-                }`}>
-                  LBS
-              </Col>
-              <Col xl={1} md={6} style={{justifyContent:"center",borderRadius:"5px"}}
-                className={`${
-                  styles[`${shop}_detailed_view_inventory_form_label`]
-                }`}>
-                  OZ
-              </Col>
-              <Col xl={1} md={6} style={{justifyContent:"center",borderRadius:"5px"}}
-                className={`${
-                  styles[`${shop}_detailed_view_inventory_form_label`]
-                }`}>
-                  LTR
-              </Col>
-              <Col xl={1} md={6} style={{justifyContent:"center",borderRadius:"5px"}}
-                className={`${
-                  styles[`${shop}_detailed_view_inventory_form_label`]
-                }`}>
-                  ML
-              </Col>
-              <Col xl={1} md={6} style={{justifyContent:"center",borderRadius:"5px"}}
-                className={`${
-                  styles[`${shop}_detailed_view_inventory_form_label`]
-                }`}>
-                  GAL
-              </Col>
-              <Col xl={1} md={6} style={{justifyContent:"center",borderRadius:"5px"}}
-                className={`${
-                  styles[`${shop}_detailed_view_inventory_form_label`]
-                }`}>
-                  GM
-              </Col>
-            </Row>
-            <Row
-            className={`${
-              styles[`${shop}_detailed_view_inventory_form_row`]
-            }`}
-            >
-              <Col
-                xl={1}
-                md={6}
-                className={`${
-                  styles[`${shop}_detailed_view_inventory_form_input_col`]
-                }`}>
-                <Form.Control
-                  name={"TOTAL_CASES"}
-                  placeholder={"Calculated Total Cases"}
-                  value={totalCases ? totalCases.toFixed(1) : selectedData.totalcase.toFixed(1)}
-                  className={`${
-                    styles[`${shop}_detailed_view_inventory_form_input`]
-                  }`}
-                  disabled
-                  ></Form.Control>
-              </Col>
-              <Col
-                xl={1}
-                md={6}
-                className={`${
-                  styles[`${shop}_detailed_view_inventory_form_input_col`]
-                }`}>
-                <Form.Control
-                  name={"TOTAL_Bags"}
-                  placeholder={"Calculated Total Bags"}
-                  value={totalBags ? totalBags.toFixed(1) : selectedData.totalbags.toFixed(1)}
-                  className={`${
-                    styles[`${shop}_detailed_view_inventory_form_input`]
-                  }`}
-                  disabled
-                  ></Form.Control>
-              </Col>
-              <Col 
-                xl={1}
-                md={6}
-                className={`${
-                  styles[`${shop}_detailed_view_inventory_form_input_col`]
-                }`}>
-                  <Form.Control
-                    name={"EACH"}
-                    className={`${
-                      styles[`${shop}_detailed_view_inventory_form_input`]
-                    }`}
-                    style={{borderRadius:"5px"}}
-                    disabled="true"
-                    placeholder={selectedData ? selectedData.totaleach : ""}
-                  ></Form.Control>
-
-              </Col>
-              <Col 
-                xl={1}
-                md={6}
-                className={`${
-                  styles[`${shop}_detailed_view_inventory_form_input_col`]
-                }`}>
-                  <Form.Control 
-                    name={"TRAY"}
-                    className={`${
-                      styles[`${shop}_detailed_view_inventory_form_input`]
-                    }`}
-                    style={{borderRadius:"5px"}}
-                    disabled="true"
-                    placeholder={selectedData ? selectedData.totaltray : ""}
-                    ></Form.Control>
-              </Col>
-              <Col 
-                xl={2}
-                md={6}
-                className={`${
-                  styles[`${shop}_detailed_view_inventory_form_input_col`]
-                }`}>
-                  <Form.Control 
-                    name={"SLEEVES"}
-                    className={`${
-                      styles[`${shop}_detailed_view_inventory_form_input`]
-                    }`}
-                    style={{borderRadius:"5px"}}
-                    disabled="true"
-                    placeholder={selectedData ? selectedData.totalsleeves : ""}
-                    ></Form.Control>
-              </Col>
-              <Col
-                xl={1}
-                md={6}
-                className={`${
-                  styles[`${shop}_detailed_view_inventory_form_input_col`]
-                }`}>
-                  <Form.Control 
-                    name={"LBS"}
-                    className={`${
-                      styles[`${shop}_detailed_view_inventory_form_input`]
-                    }`}
-                    value={totalLBS ? totalLBS.toFixed(1) : selectedData.totallb.toFixed(1)}
-                    style={{borderRadius:"5px"}}
-                    disabled="true"
-                    placeholder={selectedData ? selectedData.totallb : ""}
-                    ></Form.Control>
-              </Col>
-              
-              <Col 
-                xl={1}
-                md={6}
-                className={`${
-                  styles[`${shop}_detailed_view_inventory_form_input_col`]
-                }`}>
-                  <Form.Control 
-                    name={"OZ"}
-                    className={`${
-                      styles[`${shop}_detailed_view_inventory_form_input`]
-                    }`}
-                    style={{borderRadius:"5px"}}
-                    disabled="true"
-                    placeholder={selectedData ? selectedData.totaloz : ""}
-                    value={totalOZ ? totalOZ.toFixed(1) : selectedData.totaloz.toFixed(1)}
-                    ></Form.Control>
-              </Col>
-              <Col
-                xl={1}
-                md={6}
-                className={`${
-                  styles[`${shop}_detailed_view_inventory_form_input_col`]
-                }`}>
-                  <Form.Control 
-                    name={"LTR"}
-                    className={`${
-                      styles[`${shop}_detailed_view_inventory_form_input`]
-                    }`}
-                    style={{borderRadius:"5px"}}
-                    disabled="true"
-                    placeholder={selectedData ? selectedData.totalltr : ""}
-                    ></Form.Control>
-              </Col>
-              <Col
-                xl={1}
-                md={6}
-                className={`${
-                  styles[`${shop}_detailed_view_inventory_form_input_col`]
-                }`}>
-                  <Form.Control 
-                    name={"ML"}
-                    className={`${
-                      styles[`${shop}_detailed_view_inventory_form_input`]
-                    }`}
-                    style={{borderRadius:"5px"}}
-                    disabled="true"
-                    placeholder={selectedData ? selectedData.totalml : ""}
-                    ></Form.Control>
-              </Col>
-              <Col
-                xl={1}
-                md={6}
-                className={`${
-                  styles[`${shop}_detailed_view_inventory_form_input_col`]
-                }`}>
-                  <Form.Control 
-                    name={"GAL"}
-                    className={`${
-                      styles[`${shop}_detailed_view_inventory_form_input`]
-                    }`}
-                    style={{borderRadius:"5px"}}
-                    disabled="true"
-                    placeholder={selectedData ? selectedData.totalgal : ""}
-                    ></Form.Control>
-              </Col>
-              <Col
-                xl={1}
-                md={6}
-                className={`${
-                  styles[`${shop}_detailed_view_inventory_form_input_col`]
-                }`}>
-                  <Form.Control 
-                    name={"GM"}
-                    className={`${
-                      styles[`${shop}_detailed_view_inventory_form_input`]
-                    }`}
-                    style={{borderRadius:"5px"}}
-                    disabled="true"
-                    placeholder={selectedData ? selectedData.totalgm : ""}
-                    ></Form.Control>
-              </Col>
+            <Row className={`${styles[`${shop}_detailed_view_inventory_form_row`]}`}>
+                <Col xl={1} xxl={1} lg={2} md={2}>
+                  <Row>
+                    <Col xs={12} style={{justifyContent:"center",borderRadius:"5px"}} className={`${styles[`${shop}_detailed_view_inventory_form_label`]}`}>
+                        CASES
+                    </Col>
+                    <Col xs={12} className={`${styles[`${shop}_detailed_view_inventory_form_input_col`]}`}>
+                      <Form.Control name={"TOTAL_CASES"} placeholder={"Calculated Total Cases"} value={totalCases ? totalCases.toFixed(1) : selectedData.totalcase.toFixed(1)} 
+                        className={`${styles[`${shop}_detailed_view_inventory_form_input`]}`}>
+                      </Form.Control>
+                    </Col>
+                  </Row>
+                </Col>
+                <Col xl={1} xxl={1} lg={2} md={2}>
+                  <Row>
+                    <Col xs={12} style={{justifyContent:"center",borderRadius:"5px"}} className={`${styles[`${shop}_detailed_view_inventory_form_label`]}`}>
+                      BAGS
+                    </Col>
+                    <Col xs={12} className={`${styles[`${shop}_detailed_view_inventory_form_input_col`]}`}>
+                      <Form.Control name={"TOTAL_Bags"} placeholder={"Calculated Total Bags"} value={totalBags ? totalBags.toFixed(1) : selectedData.totalbags.toFixed(1)}
+                        className={`${styles[`${shop}_detailed_view_inventory_form_input`]}`}>
+                      </Form.Control>
+                    </Col>
+                  </Row>
+                </Col>
+                <Col xl={1} xxl={1} lg={2} md={2}>
+                  <Row>
+                    <Col xs={12} style={{justifyContent:"center",borderRadius:"5px"}} className={`${styles[`${shop}_detailed_view_inventory_form_label`]}`}>
+                      EACH
+                    </Col>
+                    <Col xs={12} className={`${styles[`${shop}_detailed_view_inventory_form_input_col`]}`}>
+                      <Form.Control name={"EACH"} className={`${styles[`${shop}_detailed_view_inventory_form_input`]}`} style={{borderRadius:"5px"}}
+                        placeholder={selectedData ? selectedData.totaleach : ""}>
+                      </Form.Control>
+                    </Col>
+                  </Row>
+                </Col>
+                <Col xl={1} xxl={1} lg={2} md={2}>
+                  <Row>
+                    <Col xs={12} style={{justifyContent:"center",borderRadius:"5px"}} className={`${styles[`${shop}_detailed_view_inventory_form_label`]}`}>
+                      TRAY
+                    </Col>
+                    <Col xs={12} className={`${styles[`${shop}_detailed_view_inventory_form_input_col`]}`}>
+                      <Form.Control name={"TRAY"} className={`${ styles[`${shop}_detailed_view_inventory_form_input`]}`} style={{borderRadius:"5px"}}
+                        placeholder={selectedData ? selectedData.totaltray : ""}>
+                      </Form.Control>
+                    </Col>
+                  </Row>
+                </Col>
+                <Col xl={2} xxl={2} lg={4} md={4}>
+                  <Row>
+                    <Col xs={12} style={{justifyContent:"center",borderRadius:"5px"}} className={`${styles[`${shop}_detailed_view_inventory_form_label`]}`}>
+                      SLEEVES
+                    </Col>
+                    <Col xs={12} className={`${styles[`${shop}_detailed_view_inventory_form_input_col`]}`}>
+                      <Form.Control name={"SLEEVES"} className={`${styles[`${shop}_detailed_view_inventory_form_input`]}`} style={{borderRadius:"5px"}}
+                        placeholder={selectedData ? selectedData.totalsleeves : ""}>
+                      </Form.Control>
+                    </Col>
+                  </Row>
+                </Col>
+                <Col xl={1} xxl={1} lg={2}  md={2}>
+                  <Row>
+                    <Col xs={12} style={{justifyContent:"center",borderRadius:"5px"}} className={`${styles[`${shop}_detailed_view_inventory_form_label`]}`}>
+                      LBS
+                    </Col>
+                    <Col xs={12} className={`${styles[`${shop}_detailed_view_inventory_form_input_col`]}`}>
+                      <Form.Control name={"LBS"} className={`${styles[`${shop}_detailed_view_inventory_form_input`]}`}
+                        value={totalLBS ? totalLBS.toFixed(1) : selectedData.totallb.toFixed(1)} style={{borderRadius:"5px"}}
+                        placeholder={selectedData ? selectedData.totallb : ""}>
+                      </Form.Control>
+                    </Col>
+                  </Row>
+                </Col>
+                <Col xl={1} xxl={1} lg={2} md={2}>
+                  <Row>
+                    <Col xs={12} style={{justifyContent:"center",borderRadius:"5px"}} className={`${styles[`${shop}_detailed_view_inventory_form_label`]}`}>
+                      OZ
+                    </Col>
+                    <Col xs={12} className={`${styles[`${shop}_detailed_view_inventory_form_input_col`]}`}>
+                      <Form.Control name={"OZ"} className={`${styles[`${shop}_detailed_view_inventory_form_input`]}`} style={{borderRadius:"5px"}}
+                        placeholder={selectedData ? selectedData.totaloz : ""} value={totalOZ ? totalOZ.toFixed(1) : selectedData.totaloz.toFixed(1)}>
+                      </Form.Control>
+                    </Col>
+                  </Row>
+                </Col>
+                <Col xl={1} xxl={1} lg={2} md={2}>
+                  <Row>
+                    <Col xs={12} style={{justifyContent:"center",borderRadius:"5px"}} className={`${styles[`${shop}_detailed_view_inventory_form_label`]}`}>
+                      LTR
+                    </Col>
+                    <Col xs={12} className={`${styles[`${shop}_detailed_view_inventory_form_input_col`]}`}>
+                      <Form.Control name={"LTR"} className={`${styles[`${shop}_detailed_view_inventory_form_input`]}`} style={{borderRadius:"5px"}}
+                        placeholder={selectedData ? selectedData.totalltr : ""}>
+                      </Form.Control>
+                    </Col>
+                  </Row>
+                </Col>
+                <Col xl={1} xxl={1} lg={2} md={2}>
+                  <Row>
+                    <Col xs={12} style={{justifyContent:"center",borderRadius:"5px"}} className={`${styles[`${shop}_detailed_view_inventory_form_label`]}`}>
+                      ML
+                    </Col>
+                    <Col xs={12} className={`${styles[`${shop}_detailed_view_inventory_form_input_col`]}`}>
+                      <Form.Control name={"ML"} className={`${styles[`${shop}_detailed_view_inventory_form_input`]}`} style={{borderRadius:"5px"}}
+                        placeholder={selectedData ? selectedData.totalml : ""}>
+                      </Form.Control>
+                    </Col>
+                  </Row>
+                </Col>
+                <Col xl={1} xxl={1} lg={2} md={2}>
+                  <Row>
+                    <Col xs={12} style={{justifyContent:"center",borderRadius:"5px"}} className={`${styles[`${shop}_detailed_view_inventory_form_label`]}`}>
+                      GAL
+                    </Col>
+                    <Col xs={12} className={`${styles[`${shop}_detailed_view_inventory_form_input_col`]}`}>
+                      <Form.Control name={"GAL"} className={`${styles[`${shop}_detailed_view_inventory_form_input`]}`} style={{borderRadius:"5px"}}
+                        placeholder={selectedData ? selectedData.totalgal : ""}>
+                      </Form.Control>
+                    </Col>
+                  </Row>
+                </Col>
+                <Col xl={1} xxl={1} lg={2} md={2}>
+                  <Row>
+                    <Col xs={12} style={{justifyContent:"center",borderRadius:"5px"}} className={`${styles[`${shop}_detailed_view_inventory_form_label`]}`}>
+                      GM
+                    </Col>
+                    <Col xs={12} className={`${styles[`${shop}_detailed_view_inventory_form_input_col`]}`}>
+                      <Form.Control name={"GM"} className={`${styles[`${shop}_detailed_view_inventory_form_input`]}`} style={{borderRadius:"5px"}}
+                        placeholder={selectedData ? selectedData.totalgm : ""}>
+                      </Form.Control>
+                    </Col>
+                  </Row>
+                </Col>
             </Row>
             <Row
               className={`${

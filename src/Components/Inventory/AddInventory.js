@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
-import { Form, FormControl, FormGroup, FormLabel, Container, FormSelect, FormText, Button, Col,Row,Modal
+import { Form, FormControl, FormGroup, FormLabel, Container, FormSelect, Button, Col,Row,Modal
     , ModalHeader, ModalTitle, ModalBody, ModalFooter, Tooltip, OverlayTrigger } from "react-bootstrap";
 import Sidebar from "../Offcanvas";
 import FiltersTab from "../FiltersTab";
@@ -65,7 +65,8 @@ function AddInventory() {
         }  else {
             setValidation(true)
         }
-    })
+    },[inventoryId,foodProId,description,shopName,size,measurement,location
+        ,uom,pack,Case,lbs,bag,ea,oz,tray,sleeves,gal,unlock,oztolbs,mltooz,lttooz,mltol])
 
     const insertDataIntoDB = async () => {
         const data = {
@@ -103,7 +104,7 @@ function AddInventory() {
             });
             if(response.status.toString() === "404") {
                 setModalMessage("Error Occurred While Adding Data into DB error: 404 not  Found")
-            } else if(response.status.toString() == "500") {
+            } else if(response.status.toString() === "500") {
                 setModalMessage("Error Occurred While Adding Data into DB error: "+response.body.message)
             }else if(response.status.toString() === "200") {
                 setModalMessage(`Item ${description} successfully inserted into database with Vendor ID 
@@ -631,17 +632,17 @@ function AddInventory() {
                 <FiltersTab/>
                 <Form className={styles[`formContainer`]} onSubmit={(e) => handleSubmit(e)} onReset={()=> handleReset()} noValidate>
                     <Row>
-                        <Col md={{span:12}} className={styles[`itemDetails`]}>
+                        <Col xs={12} md={12} sm={12} lg={12} xl={12} xxl={12} className={styles[`itemDetails`]}>
                             ITEM DETAILS
                         </Col>
                     </Row>
                     <Row className={styles[`field_rows`]}>
-                        <Col md={{span:4,offset:0}}>
+                        <Col xs={12} sm={12} md={12} lg={6} xl={4} xxl={4}>
                             <Row className={styles[`form_row`]}>
-                                <Col md={{span:4,offset:0}}>
+                                <Col xs={12} sm={6} >
                                     <FormLabel className={styles[`input_label`]}>Vendor Id</FormLabel>
                                 </Col>
-                                <Col md={{span:7,offset:0}}>
+                                <Col xs={12} sm={6}>
                                     <FormGroup className={styles[`input_row`]}>
                                         <OverlayTrigger placement="bottom" overlay={inventoryToolTip}>
                                             <FormControl required type="input" placeholder="Enter Inventory Id..." className={styles[`input_row_value`]}
@@ -653,12 +654,12 @@ function AddInventory() {
                                 </Col>
                             </Row>
                         </Col>
-                        <Col md={{span:4,offset:0}}>
+                        <Col  xs={12} sm={12} md={12} lg={6} xl={4} xxl={4}>
                             <Row className={styles[`form_row`]}>
-                                <Col md={{span:4,offset:0}}>
+                                <Col xs={12} sm={6}>
                                     <FormLabel className={styles[`input_label`]}>FoodPro ID</FormLabel>
                                 </Col>
-                                <Col md={{span:8,offset:0}}>
+                                <Col xs={12} sm={6}>
                                     <FormGroup className={styles[`input_row`]}>
                                         <OverlayTrigger placement="bottom" overlay={foodProToolTip}>
                                             <FormControl className={styles[`input_row_value`]} required type="input" placeholder="Enter FoodPro Id..." 
@@ -670,12 +671,12 @@ function AddInventory() {
                                 </Col>
                             </Row>
                         </Col>
-                        <Col md={{span:4,offset:0}}>
+                        <Col xs={12} sm={12} md={12} lg={6} xl={4} xxl={4}>
                             <Row className={styles[`form_row`]}>
-                                <Col md={{span:4,offset:0}}>
+                                <Col xs={12} sm={6}>
                                     <FormLabel className={styles[`input_label`]}>Location</FormLabel>
                                 </Col>
-                                <Col md={{span:8,offset:0}}>
+                                <Col xs={12} sm={6}>
                                     <FormGroup className={styles[`input_row`]}>
                                         <OverlayTrigger placement="bottom" overlay={locationToolTip}>
                                             <FormSelect className={styles[`input_row_value`]} required onChange={(e) => handleLocation(e)} id="location">
@@ -716,12 +717,12 @@ function AddInventory() {
                         </Col>
                     </Row>
                     <Row className={styles[`field_rows`]}>
-                        <Col md={{span:4,offset:0}}>
+                        <Col xs={12} sm={12} md={12} lg={6} xl={4} xxl={4}>
                             <Row className={styles[`form_row`]}>
-                                <Col md={{span:4,offset:0}}>
+                                <Col xs={12} sm={6}>
                                     <FormLabel className={styles[`input_label`]}>Description</FormLabel>
                                 </Col>
-                                <Col md={{span:7,offset:0}}>
+                                <Col xs={12} sm={6}>
                                     <FormGroup className={styles[`input_row`]}>
                                         <OverlayTrigger placement="bottom" overlay={descriptionToolTip}>
                                             <FormControl required type="input" placeholder="Enter Description" className={styles[`input_row_value`]} 
@@ -733,12 +734,12 @@ function AddInventory() {
                                 </Col>
                             </Row>
                         </Col>
-                        <Col md={{span:4,offset:0}}>
+                        <Col xs={12} sm={12} md={12} lg={6} xl={4} xxl={4}>
                             <Row className={styles[`form_row`]}>
-                                <Col md={{span:4}}>
+                                <Col xs={12} sm={6}>
                                     <FormLabel className={styles[`input_label`]}>Shop Name</FormLabel>
                                 </Col>
-                                <Col md={{span:8}}>
+                                <Col xs={12} sm={6}>
                                     <FormGroup className={styles[`input_row`]}>
                                         <OverlayTrigger placement="bottom" overlay={shopNameToolTip}>
                                         <FormSelect className={styles[`input_row_value`]} required onChange={(e) => handleShopName(e)}
@@ -753,12 +754,12 @@ function AddInventory() {
                                 </Col>
                             </Row>
                         </Col>
-                        <Col md={{span:4,offset:0}}>
+                        <Col xs={12} sm={12} md={12} lg={6} xl={4} xxl={4}>
                             <Row className={styles[`form_row`]}>
-                                <Col md={{span:4,offset:0}}>
+                                <Col xs={12} sm={6}>
                                     <FormLabel className={styles[`input_label`]}>Size</FormLabel>
                                 </Col>
-                                <Col md={{span:8,offset:0}}>
+                                <Col xs={12} sm={6}>
                                     <FormGroup className={styles[`input_row`]}>
                                         <OverlayTrigger placement="bottom" overlay={sizeToolTip}>
                                             <FormControl required type="number" placeholder="Enter Size.." className={styles[`input_row_value`]} 
@@ -772,12 +773,12 @@ function AddInventory() {
                         </Col>
                     </Row>
                     <Row className={styles[`field_rows`]}>
-                        <Col md={{span:4,offset:0}}>
+                        <Col xs={12} sm={12} md={12} lg={6} xl={4} xxl={4}>
                             <Row className={styles[`form_row`]}>
-                                <Col md={{span:4,offset:0}}>
+                                <Col xs={12} sm={6}>
                                     <FormLabel className={styles[`input_label`]}>Measurement</FormLabel>
                                 </Col>
-                                <Col md={{span:7,offset:0}}>
+                                <Col xs={12} sm={6}>
                                     <FormGroup className={styles[`input_row`]}>
                                         <OverlayTrigger placement="bottom" overlay={measurementToolTip}>
                                             <FormControl required type="input" placeholder="Enter Measurement" className={styles[`input_row_value`]} 
@@ -790,12 +791,12 @@ function AddInventory() {
                             </Row>
                         </Col>
 
-                        <Col md={{span:4,offset:0}}>
+                        <Col xs={12} sm={12} md={12} lg={6} xl={4} xxl={4}>
                             <Row className={styles[`form_row`]}>
-                                <Col md={{span:4,offset:0}}>
+                                <Col xs={12} sm={6}>
                                     <FormLabel className={styles[`input_label`]}>Pack</FormLabel>
                                 </Col>
-                                <Col md={{span:8,offset:0}}>
+                                <Col xs={12} sm={6}>
                                     <FormGroup className={styles[`input_row`]}>
                                         <OverlayTrigger placement="bottom" overlay={packToolTip}>
                                             <FormControl required type="number" placeholder="Enter Number Of Packs.." className={styles[`input_row_value`]} 
@@ -807,12 +808,12 @@ function AddInventory() {
                                 </Col>
                             </Row>
                         </Col>
-                        <Col md={{span:4,offset:0}}>
+                        <Col xs={12} sm={12} md={12} lg={6} xl={4} xxl={4}>
                             <Row className={styles[`form_row`]}>
-                                <Col md={{span:4}}>
+                                <Col xs={12} sm={6}>
                                     <FormLabel className={styles[`input_label`]}>UOM</FormLabel>
                                 </Col>
-                                <Col md={{span:8}}>
+                                <Col xs={12} sm={6}>
                                     <FormGroup className={styles[`input_row`]}>
                                         <OverlayTrigger placement="bottom" overlay={uomToolTip}>
                                             <FormControl required type="input" placeholder="Enter UOM" className={styles[`input_row_value`]} 
@@ -826,17 +827,17 @@ function AddInventory() {
                         </Col>
                     </Row>
                     <Row>
-                        <Col md={{span:12}} className={styles[`onHandInventory`]}>
+                        <Col xs={12} sm={12} md={12} lg={12} xl={12} xxl={12} className={styles[`onHandInventory`]}>
                             ON-HAND INVENTORY
                         </Col>
                     </Row>
                     <Row className={styles[`field_rows`]}>
-                        <Col md={{span:4,offset:0}}>
+                        <Col xs={12} sm={12} md={6} lg={6} xl={4} xxl={4}>
                             <Row className={styles[`form_row`]}>
-                                <Col md={{span:3}}>
+                                <Col xs={12} sm={6}>
                                     <FormLabel className={styles[`input_label`]}>Case</FormLabel>
                                 </Col>
-                                <Col md={{span:7}}>
+                                <Col xs={12} sm={6}>
                                     <FormGroup className={styles[`input_row`]}>
                                         <OverlayTrigger placement="bottom" overlay={caseToolTip}>
                                             <FormControl required type="number" placeholder="Enter Number of case" className={styles[`input_row_value`]} 
@@ -848,12 +849,12 @@ function AddInventory() {
                                 </Col>
                             </Row>
                         </Col>
-                        <Col md={{span:3,offset:0}}>
+                        <Col xs={12} sm={12} md={6} lg={6} xl={4} xxl={4}>
                             <Row className={styles[`form_row`]}>
-                                <Col md={{span:3}}> 
+                                <Col xs={12} sm={6}> 
                                     <FormLabel className={styles[`input_label`]}>LBS</FormLabel>
                                 </Col>
-                                <Col md={{span:6}}>
+                                <Col xs={12} sm={6}>
                                     <FormGroup className={styles[`input_row`]}>
                                         <OverlayTrigger placement="bottom" overlay={lbsToolTip}>
                                             <FormControl required type="number" placeholder="Enter LBS" className={styles[`input_row_value`]} 
@@ -865,12 +866,12 @@ function AddInventory() {
                                 </Col>
                             </Row>
                         </Col>
-                        <Col md={{span:4,offset:0}}>
+                        <Col xs={12} sm={12} md={6} lg={6} xl={4} xxl={4}>
                             <Row className={styles[`form_row`]}>
-                                <Col md={{span:3}}>
+                                <Col xs={12} sm={6}>
                                     <FormLabel className={styles[`input_label`]}>Bag</FormLabel>
                                 </Col>
-                                <Col md={{span:7}}>
+                                <Col xs={12} sm={6}>
                                     <FormGroup className={styles[`input_row`]}>
                                         <OverlayTrigger placement="bottom" overlay={bagToolTip}>
                                             <FormControl required type="number" placeholder="Enter Number of Bags" className={styles[`input_row_value`]} 
@@ -884,12 +885,12 @@ function AddInventory() {
                         </Col>
                     </Row>
                     <Row className={styles[`field_rows`]}>
-                        <Col md={{span:4,offset:0}}>
+                        <Col xs={12} sm={12} md={6} lg={6} xl={4} xxl={4}>
                             <Row className={styles[`form_row`]}>
-                                <Col md={{span:3}}>
+                                <Col xs={12} sm={6}>
                                     <FormLabel className={styles[`input_label`]}>Tray</FormLabel>
                                 </Col>
-                                <Col md={{span:7}}>
+                                <Col xs={12} sm={6}>
                                     <FormGroup className={styles[`input_row`]}>
                                         <OverlayTrigger placement="bottom" overlay={trayToolTip}>
                                             <FormControl required type="number" placeholder="Enter Number of trays" className={styles[`input_row_value`]} 
@@ -901,12 +902,12 @@ function AddInventory() {
                                 </Col>
                             </Row>
                         </Col>
-                        <Col md={{span:3,offset:0}}>
+                        <Col xs={12} sm={12} md={6} lg={6} xl={4} xxl={4}>
                             <Row className={styles[`form_row`]}>
-                                <Col md={{span:3}}>
+                                <Col xs={12} sm={6}>
                                     <FormLabel className={styles[`input_label`]}>EA</FormLabel>
                                 </Col>
-                                <Col md={{span:6}}>
+                                <Col xs={12} sm={6}>
                                     <FormGroup className={styles[`input_row`]}>
                                         <OverlayTrigger placement="bottom" overlay={eaToolTip}>
                                             <FormControl required type="number" placeholder="Enter EA" className={styles[`input_row_value`]} 
@@ -918,12 +919,12 @@ function AddInventory() {
                                 </Col>
                             </Row>
                         </Col>
-                        <Col md={{span:4,offset:0}}>
+                        <Col xs={12} sm={12} md={6} lg={6} xl={4} xxl={4}>
                             <Row className={styles[`form_row`]}>
-                                <Col md={{span:3}}>
+                                <Col xs={12} sm={6}>
                                     <FormLabel className={styles[`input_label`]}>OZ</FormLabel>
                                 </Col>
-                                <Col md={{span:7}}>
+                                <Col xs={12} sm={6}> 
                                     <FormGroup className={styles[`input_row`]}>
                                         <OverlayTrigger placement="bottom" overlay={ozToolTip}>
                                             <FormControl required type="number" placeholder="Enter OZ" className={styles[`input_row_value`]} 
@@ -937,12 +938,12 @@ function AddInventory() {
                         </Col>
                     </Row>
                     <Row className={styles[`field_rows`]}>
-                        <Col md={{span:4,offset:0}}>
+                        <Col xs={12} sm={12} md={6} lg={6} xl={4} xxl={4}>
                             <Row className={styles[`form_row`]}>
-                                <Col md={{span:3}}>
+                                <Col xs={12} sm={6}>
                                     <FormLabel className={styles[`input_label`]}>Gal</FormLabel>
                                 </Col>
-                                <Col md={{span:7}}>
+                                <Col xs={12} sm={6}>
                                     <FormGroup className={styles[`input_row`]}>
                                         <OverlayTrigger placement="bottom" overlay={galToolTip}>
                                             <FormControl required type="number" placeholder="Enter GAL" className={styles[`input_row_value`]} 
@@ -954,12 +955,12 @@ function AddInventory() {
                                 </Col>
                             </Row>
                         </Col>
-                        <Col md={{span:3,offset:0}}>
+                        <Col xs={12} sm={12} md={6} lg={6} xl={4} xxl={4}>
                             <Row className={styles[`form_row`]}>
-                                <Col md={{span:4}}>
+                                <Col xs={12} sm={6}>
                                     <FormLabel className={styles[`input_label`]}>Sleeves</FormLabel>
                                 </Col>
-                                <Col md={{span:7}}>
+                                <Col xs={12} sm={6}>
                                     <FormGroup className={styles[`input_row`]}>
                                         <OverlayTrigger placement="bottom" overlay={sleevesToolTip}>
                                             <FormControl required type="number" placeholder="Enter Sleeves" className={styles[`input_row_value`]} 
@@ -971,12 +972,12 @@ function AddInventory() {
                                 </Col>
                             </Row>
                         </Col>
-                        <Col md={{span:4,offset:0}}>
+                        <Col xs={12} sm={12} md={6} lg={6} xl={4} xxl={4}>
                             <Row className={styles[`form_row`]}>
-                                <Col md={{span:3}}>
+                                <Col xs={12} sm={6} >
                                     <FormLabel className={styles[`input_label`]}>Unlock</FormLabel>
                                 </Col>
-                                <Col md={{span:7}}>
+                                <Col xs={12} sm={6} >
                                     <FormGroup className={styles[`input_row`]}>
                                         <OverlayTrigger placement="bottom" overlay={unlockToolTip}>
                                             <FormControl required type="input" placeholder="Enter Unlock" className={styles[`input_row_value`]}
@@ -990,12 +991,12 @@ function AddInventory() {
                         </Col>
                     </Row>
                     <Row className={styles['field_rows']}>
-                        <Col md={{span:4,offset:0}}>
+                        <Col xs={12} sm={12} md={6} lg={6} xl={4} xxl={4}>
                             <Row className={styles['form_row']}>
-                                <Col md={{span:3}}>
+                                <Col xs={12} sm={6}>
                                     <FormLabel className={styles['input_label']}>oz to lbs</FormLabel>
                                 </Col>
-                                <Col md={{span: 7}}>
+                                <Col xs={12} sm={6}>
                                     <FormGroup className={styles['input_row']}>
                                         <OverlayTrigger placement="bottom" overlay={ozToLbsTooltip}>
                                             <FormControl required type="number" placeholder="Enter oz to lbs value" className={styles['input_row_value']}
@@ -1007,12 +1008,12 @@ function AddInventory() {
                                 </Col>
                             </Row>
                         </Col>
-                        <Col md={{span:3}}>
+                        <Col xs={12} sm={12} md={6} lg={6} xl={4} xxl={4}>
                             <Row className={styles['form_row']}>
-                                <Col md={{span:4}}>
+                                <Col xs={12} sm={6}>
                                     <FormLabel className={styles['input_label']}>ml to oz</FormLabel>
                                 </Col>
-                                <Col md={{span:7}}>
+                                <Col xs={12} sm={6}>
                                     <FormGroup className={styles['input_row']}>
                                         <OverlayTrigger placement="bottom" overlay={mlToOzToolTip}>
                                             <FormControl required type="number" placeholder="Enter ML to OZ value" className={styles['input_row_value']}
@@ -1024,12 +1025,12 @@ function AddInventory() {
                                 </Col>
                             </Row>
                         </Col>
-                        <Col md={{span:4}}>
+                        <Col xs={12} sm={12} md={6} lg={6} xl={4} xxl={4}>
                             <Row className={styles['form_row']}>
-                                <Col md={{span:3}}>
+                                <Col xs={12} sm={6}>
                                     <FormLabel className={styles['input_label']}>ltr to oz</FormLabel>
                                 </Col>
-                                <Col md={{span:7}}>
+                                <Col xs={12} sm={6}>
                                     <FormGroup className={styles['input_row']}>
                                         <OverlayTrigger placement="bottom" overlay={lttooztooltip}>
                                             <FormControl required type="number" placeholder="Enter LT to OZ value" className={styles['input_row_value']}
@@ -1043,12 +1044,12 @@ function AddInventory() {
                         </Col>
                     </Row>
                     <Row className={styles['field_rows']}>
-                        <Col md={{span:4,offset:0}}>
+                        <Col xs={12} sm={12} md={6} lg={6} xl={4} xxl={4}>
                             <Row className={styles['form_row']}>
-                                <Col md={{span:3}}>
+                                <Col xs={12} sm={6}>
                                     <FormLabel className={styles['input_label']}>ml to ltr</FormLabel>
                                 </Col>
-                                <Col md={{span: 7}}>
+                                <Col xs={12} sm={6}>
                                     <FormGroup className={styles['input_row']}>
                                         <OverlayTrigger placement="bottom" overlay={mlToLtrToolTip}>
                                             <FormControl required type="number" placeholder="Enter ml to l value" className={styles['input_row_value']}
@@ -1062,14 +1063,14 @@ function AddInventory() {
                         </Col>
                     </Row>
                     <Row className={styles[`submitResetButtons`]}>
-                        <Col md={{span:4,offset:0}}>
+                        <Col xs={12} sm={12} md={6} lg={6} xl={4} xxl={4}>
                             <Row className={styles[`form_row`]}>
-                                <Col md={{span:3}}>
+                                <Col xs={6} sm={6}>
                                     <OverlayTrigger placement="top" overlay={submitToolTip}>
                                         <Button type="submit">Submit</Button>
                                     </OverlayTrigger>
                                 </Col>
-                                <Col md={{span:7,offset:0}}>
+                                <Col xs={6} sm={6}>
                                     <OverlayTrigger placement="top" overlay={resetToolTip}>
                                         <Button type="reset" className={styles[`resetButton`]}>Reset</Button>
                                     </OverlayTrigger>
