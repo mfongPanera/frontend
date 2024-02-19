@@ -78,33 +78,31 @@ function ImportInventory() {
 
     const renderTable=() => {
         return (
-          <Container className={`${styles[`${shop}_table_container`]}`}>
-            <div className={`${styles[`${shop}_table_div`]}`}>
-              <Table striped bordered hover size="md">
-                <thead>
-                  <tr className={`${styles[`${shop}_table_headings`]}`}>
-                    {Object.keys(parsedData[0]).map((key) => (
-                      <th key={key}>{key}</th>
+          <div className={`${styles[`${shop}_table_div`]}`}>
+            <Table striped bordered hover size="md">
+              <thead>
+                <tr className={`${styles[`${shop}_table_headings`]}`}>
+                  {Object.keys(parsedData[0]).map((key) => (
+                    <th key={key}>{key}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {parsedData.map((row, index) => (
+                  <tr key={index} className={`${styles[`${shop}_table_column_values`]}`}>
+                    {Object.values(row).map((value, index) => (
+                      <td key={index}>{value}</td>
                     ))}
                   </tr>
-                </thead>
-                <tbody>
-                  {parsedData.map((row, index) => (
-                    <tr key={index} className={`${styles[`${shop}_table_column_values`]}`}>
-                      {Object.values(row).map((value, index) => (
-                        <td key={index}>{value}</td>
-                      ))}
-                    </tr>
-                  ))}
-                </tbody>
-              </Table>
-            </div>
+                ))}
+              </tbody>
+            </Table>
             <div className={`${styles[`${shop}_button_container`]}`}>
               <Button onClick={()=>handleInsertButtonClick()} className={`${styles[`${shop}_insert_button`]}`}>
                 INSERT
               </Button>
             </div>
-          </Container>
+          </div>
         )
     }
 

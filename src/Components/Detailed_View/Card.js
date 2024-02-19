@@ -19,7 +19,6 @@ function InventoryCard(props) {
   };
 
   const tryRequire = () => {
-    console.log(props.data)
     try {
       return require(`./../images/${props.data.location_}/${props.data.vendor_id}.jpg`);
     } catch (err) {

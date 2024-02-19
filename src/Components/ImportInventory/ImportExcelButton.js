@@ -36,7 +36,7 @@ function ImportExcelButton() {
         <React.Fragment>
             <Container>
                 <Row>
-                    <Col xl={12}>
+                    <Col xl={{span:6,offset:6}}>
                         <Button className={`${styles[`${shop}_common_import_label`]}`} onClick={handleButtonClick}>
                             <RiFileExcel2Line  size={"1.4em"}
                                 className={`${styles[`${shop}_common_excel_icon`]}`}>

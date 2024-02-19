@@ -62,7 +62,6 @@ export const dataReducer = createSlice({
     },
     setLoadingSpinner: (state, action) => {
       state.loadingSpinner = action.payload.loadingSpinner;
-      console.log(state.loadingSpinner)
     },
     clearSelectedData:(state, action) => {
       state.selectedData = ""
