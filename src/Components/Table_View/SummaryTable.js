@@ -35,9 +35,7 @@ const SummaryTable = React.forwardRef((props, ref)=> {
               return (
                 <tr>
                   <td>
-                    {selectedDate
-                      .toLocaleDateString("en-US")
-                      .replaceAll("/", "-")}
+                    {selectedDate?selectedDate:data.created_date.split('T')[0]}
                   </td>
                   {dataValues.map((val, id) => {
                     return <td>{data[val]}</td>;

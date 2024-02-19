@@ -12,6 +12,7 @@ function TableView() {
   const shop = "Panera";
   const excelTableRef = useRef(null);
   const selectedDate = useSelector((state) => state.dataReducer.selectedDate);
+  const requestedData = useSelector((state) => state.dataReducer.requestedData);
   const selectedLocation = useSelector(
     (state) => state.dataReducer.selectedLocation
   );
@@ -26,7 +27,7 @@ function TableView() {
       <Sidebar />
       <Container fluid className={styles[`${shop}_detailed_view_container`]}>
         <FiltersTab onDownload={onDownload} />
-        {selectedDate && selectedLocation ? (
+        {(selectedDate && selectedLocation) || (requestedData) ? (
           <SummaryTable ref={excelTableRef} />
         ) : (
           <TableFiller />

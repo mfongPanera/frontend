@@ -31,7 +31,7 @@ const selectedDate = useSelector((state)=>state.dataReducer.selectedDate)
               ></img>
             </Row>
             <Row className={`${styles[`${shop}_table_view_inventory_filler_row_content`]}`}>
-                {!selectedDate && !selectedLocation?"Waiting for you to select date..": !selectedLocation?"Great! Now, please select location!":""}
+                {!selectedDate && !selectedLocation?"Search For an Item or select a date": !selectedLocation?"Great! Now, please select location!":""}
             </Row>
           </Col>
         </Row>
