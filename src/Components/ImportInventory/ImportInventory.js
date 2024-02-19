@@ -35,7 +35,9 @@ function ImportInventory() {
         });
         if(response.status.toString() === "200") {
           setModalMessage("Data Inserted Succesfully");
-        } else {
+        } else if(response.status.toString() === "501") {
+          setModalMessage("Error: Duplicate Food Pro ID Found")
+        }else {
           setModalMessage("Error: Data Not Inserted Into DataBase");
         }
       } catch(err) {
