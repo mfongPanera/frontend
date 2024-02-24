@@ -1,6 +1,5 @@
-import React, { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { updateToastMessage } from "../app/dataReducer";
+import React from "react";
+import { useSelector } from "react-redux";
 import Alert from "react-bootstrap/Alert";
 function InventoryAlert() {
   const toastMessage = useSelector((state) => state.dataReducer.toastMessage);

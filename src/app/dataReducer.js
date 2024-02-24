@@ -69,7 +69,7 @@ export const dataReducer = createSlice({
     updateSelectedDataForSelectedItem: (state, action) => {
       let requestedData = action.payload.requestedData;
       const distinct=(value, index,self)=>{
-        return self.indexOf(value)==index;
+        return self.indexOf(value)===index;
       }
       let locations = requestedData.map(array=>array.location_)
       let uniqueLocations = locations.filter(distinct)
@@ -80,7 +80,7 @@ export const dataReducer = createSlice({
     },
     updateDataForSelectedDate: (state, action) => {
       const distinct=(value, index,self)=>{
-        return self.indexOf(value)==index;
+        return self.indexOf(value)===index;
       }
       let requestedData = action.payload.requestedData;
       let locations = requestedData.map(array=>array.location_)

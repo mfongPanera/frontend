@@ -40,7 +40,7 @@ function Sidebar() {
         <Container fluid>
           <Navbar.Brand className={`${styles[`${shop}_navbar_brand`]}`}>
             <Nav.Link>
-              <Link to={"/dashboard/detailed_view"}>
+              <Link to={"/"}>
                 <img
                   alt=""
                   src={require(`${imageMetaData[`${shop}`].url}`)}

@@ -156,11 +156,10 @@ input[type="text"] {
   width:200px;
   background-color: var(--panera_dark_green);
   margin: 10px;
-  margin-right: 30px;
   text-align: center;
   border-radius: 5px;
   font-family: Roboto;
-  font-size: 0.75rem;
+  font-size: 0.79rem;
   font-weight: 600;
   color: var(--panera_white);
   cursor: pointer;
@@ -189,7 +188,6 @@ input[type="text"] {
 .dateRange { 
   position: absolute;
   top: 130px;
-  left: 900px;
   background-color: var(--panera_white);
 }
 

@@ -4,6 +4,7 @@ import{headers, dataValues}from './../constants'
 import Table from "react-bootstrap/Table";
 
 import styles from './../../Styles/tableview.module.css'
+import TableFiller from "./TableFiller";
 
 const SummaryTable = React.forwardRef((props, ref)=> {
   const shop = "Panera"
@@ -15,11 +16,11 @@ const SummaryTable = React.forwardRef((props, ref)=> {
   return (
     <Table ref = {ref} striped bordered hover responsive>
       <thead className={`${styles[`${shop}_table_view_header`]}`}>
-        <tr>
+        {requestedData && selectedLocation ? ( <tr>
           {headers.map((data, idx) => {
             return <th>{data}</th>;
           })}
-        </tr>
+        </tr>) : <></> }
       </thead>
       <tbody className={`${styles[`${shop}_table_view_body`]}`}>
         {requestedData && selectedLocation ? (
@@ -44,7 +45,7 @@ const SummaryTable = React.forwardRef((props, ref)=> {
               );
             })
         ) : (
-          <div>LOCATION NOT SET</div>
+          <TableFiller></TableFiller>
         )}
       </tbody>
     </Table>

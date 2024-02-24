@@ -1,19 +1,114 @@
-.dateRangePickerInput {
-    border: none;
-    outline: 1px solid var(--panera_yellow);
-    padding: 6px;
-    width:200px;
-    background-color: var(--panera_dark_green);
-    margin: 10px;
-    margin-right: 30px;
-    text-align: center;
-    border-radius: 5px;
-    font-family: Roboto;
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: var(--panera_white);
-    cursor: pointer;
-    caret-color: transparent;
+@media screen and (min-width: 1500px) {
+    .dateRangePickerInput {
+        border: none;
+        outline: 1px solid var(--panera_yellow);
+        padding: 6px;
+        width:200px;
+        background-color: var(--panera_dark_green);
+        margin: 5px;
+        margin-right: 30px;
+        text-align: center;
+        border-radius: 5px;
+        font-family: Roboto;
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--panera_white);
+        cursor: pointer;
+        caret-color: transparent;
+    }
+
+    .iconCalender{
+        color: var(--panera_white);
+        position: relative;
+        left: 35px;
+    }
+
+    .dateRangeIcon {
+        display: flex;
+        align-items: center;
+    }
+    .dateRangeCSS{
+        background-color: var(--panera_white);
+        position: absolute;
+        margin-top: 10px;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .dateRangePickerInput {
+        border: none;
+        outline: 1px solid var(--panera_yellow);
+        padding: 3px;
+        width:95px;
+        background-color: var(--panera_dark_green);
+        margin-right: 10px;
+        text-align: end;
+        border-radius: 5px;
+        font-family: Roboto;
+        font-size: 0.39rem;
+        font-weight: 600;
+        color: var(--panera_white);
+        cursor: pointer;
+        caret-color: transparent;
+    }
+
+    .iconCalender{
+        color: var(--panera_white);
+        position: relative;
+        left: 20px;
+        
+    }
+
+    .dateRangeIcon {
+        display: flex;
+        align-items: center;
+        font-size: x-small;
+    }
+    .dateRangeCSS{
+        background-color: var(--panera_white);
+        position: absolute;
+        margin-top: 30px;
+        left: 20px;
+    }
+}
+
+@media screen and (min-width: 501px) and (max-width: 1499px) {
+    .dateRangePickerInput {
+        border: none;
+        outline: 1px solid var(--panera_yellow);
+        padding: 6px;
+        width:130px;
+        background-color: var(--panera_dark_green);
+        margin: 10px;
+        margin-right: 30px;
+        text-align: end;
+        border-radius: 5px;
+        font-family: Roboto;
+        font-size: 0.50rem;
+        font-weight: 600;
+        color: var(--panera_white);
+        cursor: pointer;
+        caret-color: transparent;
+    }
+
+    .iconCalender{
+        color: var(--panera_white);
+        position: relative;
+        left: 27px;
+        
+    }
+
+    .dateRangeIcon {
+        display: flex;
+        align-items: center;
+        font-size:small;
+    }
+    .dateRangeCSS{
+        background-color: var(--panera_white);
+        position: absolute;
+
+        
+    }
 }
 
 .dateRangePickerInput:hover {
@@ -29,19 +124,11 @@
     outline: 1px solid var(--panera_white);
 }
 
-.dateRangeIcon {
-    display: flex;
-    align-items: center;
-}
 
-.iconCalender{
+
+/*.iconCalender{
     color: var(--panera_white);
     position: relative;
     left: 38px;
-}
-
-.dateRangeCSS{
-    background-color: var(--panera_white);
-    position: absolute;
-    margin-top: 10px;
-}
+    size: ;
+}*/

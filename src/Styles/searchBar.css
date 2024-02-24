@@ -1,20 +1,68 @@
-.input-wrapper {
-    background-color: white;
-    border-radius: 6px;
-    width: 90%;
-    height: 2.0rem;
-    margin-top: 10px;
-    display: flex;
-    align-items: center;
-    padding-left: 10px;
+@media screen and (min-width: 1500px) {
+    .input-wrapper {
+        background-color: white;
+        border-radius: 6px;
+        width: 90%;
+        height: 2.0rem;
+        margin-top: 10px;
+        display: flex;
+        align-items: center;
+        padding-left: 10px;
+    }
 }
 
+
+@media screen and (min-width: 501px) and (max-width:1431px) {
+    .input-wrapper {
+        background-color: white;
+        border-radius: 6px;
+        width: 80%;
+        height: 2.0rem;
+        margin-top: 10px;
+        display: flex;
+        align-items: center;
+        padding-left: 10px;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .input-wrapper {
+        background-color: white;
+        border-radius: 6px;
+        width: 80%;
+        height: 2.0rem;
+        margin-top: 10px;
+        display: flex;
+        align-items: center;
+        padding-left: 10px;
+    }
+}
 .icon {
     margin: 2px;
     color: rgb(87, 108, 29);
 }
+
+.iconList {
+    margin: 4px;
+    color: rgb(87, 108, 29);
+    justify-self: center;
+}
+
+.description {
+    margin: 4px;
+    text-align: center;
+}
 .icon:hover {
     cursor: pointer;
+}
+
+.clearIcon:hover {
+    cursor: pointer;
+}
+
+.clearIcon {
+    margin: 8px;
+    color: rgb(87, 108, 29);
 }
 
 input {
@@ -39,13 +87,13 @@ input:focus {
     overflow: auto;
     max-height: 100px;
     position: absolute;
-    width: 27%;
+    width: 36.3%;
 }
 
 .listButton{
-    padding: 5px 5px;
     font-family: Roboto;
     font-size: 0.8rem;
+    padding: auto;
 }
 
 .listButton:hover {

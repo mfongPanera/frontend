@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faSearch, faX } from "@fortawesome/free-solid-svg-icons";
 import '../../Styles/searchBar.css'
 function SearchBar({setResults, setOpen, value, setInputValue}) {
 
@@ -37,11 +37,16 @@ function SearchBar({setResults, setOpen, value, setInputValue}) {
         }
     }
 
+    const clearSearch = () => {
+        setInputValue("")
+    }
+
     return(
         <div className="input-wrapper">
             <FontAwesomeIcon icon={faSearch} className="icon"></FontAwesomeIcon>
             <input placeholder="Type Any Item..." value={value}
             onChange={(e) => handleInputValue(e.target.value)}></input>
+            <span className="clearIcon" onClick={() => clearSearch()}><FontAwesomeIcon icon={faX}></FontAwesomeIcon></span>
         </div>
     )
 }
