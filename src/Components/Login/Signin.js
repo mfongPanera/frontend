@@ -17,7 +17,7 @@ function Signin() {
   const handleLogin = async (e) => {
     try {
       const body = { user_email: email, user_password: password };
-      const response = await fetch("https://35.221.31.78/auth/login", {
+      const response = await fetch("http://localhost:5000/auth/login", {
         method: "POST",
         headers: {
           "Content-type": "application/json",
