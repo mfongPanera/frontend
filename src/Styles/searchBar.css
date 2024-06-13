@@ -60,10 +60,7 @@
     cursor: pointer;
 }
 
-.clearIcon {
-    margin: 8px;
-    color: rgb(87, 108, 29);
-}
+
 
 input {
     margin-left: 5px;
@@ -96,6 +93,44 @@ input:focus {
     padding: auto;
 }
 
+.dropDown {
+    padding: 4px;
+    width: 100%;
+    border-radius: 6px 6px;
+    font-size:medium;
+    color:rgb(87, 108, 29);
+    font-weight: bold;
+    text-align: center;
+}
+
+.dropDown:active {
+    border: none;
+}
+
+
+.bar {
+    width: 100%;
+    padding: 4px;
+}
+.clearIcon {
+    
+    color: rgb(87, 108, 29);
+    width: 5%;
+    padding: 4px;
+    margin-left: auto;
+}
+.clearIconDiv {
+    align-self:center;
+    display: flex;
+}
+.searchRow {
+    width: 100%;
+}
+
+.searchCol {
+    margin: 0;
+    padding: 0;
+}
 .listButton:hover {
     background-color: rgb(87, 108, 29);
     cursor: pointer;

@@ -16,6 +16,7 @@ export const dataReducer = createSlice({
     ea: '',
     oz: '',
     gal: '',
+    gm:'',
     sleeves: '',
     totalCases: '',
     sales:'',
@@ -78,6 +79,17 @@ export const dataReducer = createSlice({
       state.selectedItem = action.payload.selectedItem
       state.requestedData = action.payload.requestedData
     },
+    updateSelectedDataForDescription: (state,action) => {
+      let requestedData = action.payload.requestedData;
+      const distinct=(value, index,self)=>{
+        return self.indexOf(value)===index;
+      }
+      let locations = requestedData.map(array=>array.location_)
+      let uniqueLocations = locations.filter(distinct)
+      uniqueLocations.push('ALL LOCATIONS')
+      state.requestedLocations = uniqueLocations
+      state.requestedData = action.payload.requestedData
+    },
     updateDataForSelectedDate: (state, action) => {
       const distinct=(value, index,self)=>{
         return self.indexOf(value)===index;
@@ -101,6 +113,7 @@ export const dataReducer = createSlice({
     },
     updateData: (state, action) => {
       state.selectedData = action.payload;
+      state.selectedItem = action.payload.description
       state.order_ = action.payload.system_par;
     },
     setOpenOrders: (state, action) => {
@@ -166,6 +179,9 @@ export const dataReducer = createSlice({
     setGal: (state, action) => {
       state.gal = action.payload;
     },
+    setGm: (state, action) => {
+      state.gm = action.payload;
+    },
     setSleeves: (state, action) => {
       state.sleeves = action.payload;
     },
@@ -216,6 +232,7 @@ export const dataReducer = createSlice({
       state.ea= ''
       state.oz= ''
       state.gal= ''
+      state.gm=''
       state.sleeves= ''
       state.totalCases= ''
       state.totalEach=''
@@ -292,7 +309,9 @@ export const {
   resetDataState,
   setLoadingSpinner,
   setUserName,
-  setTableData
+  setTableData,
+  updateSelectedDataForDescription,
+  setGm
 } = dataReducer.actions;
 
 

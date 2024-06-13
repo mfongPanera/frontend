@@ -30,7 +30,6 @@ const onDownload = props.onDownload;
       <Col xs={5} xl={5} xxl={5} lg={5}>
         <div className="search-container">
           {!addInventoryTab && !importInventoryTab ? <SearchBar setResults={setResults} setOpen={setOpen} value={inputValue} setInputValue={setInputValue}/>: null }
-          {!addInventoryTab && !importInventoryTab ?  <SearchBarList results = {searchResults} open={open} setOpen={setOpen} setInputValue = {setInputValue}/> : null }
         </div>
       </Col>
       <Col className={`${styles[`${shop}_common_date_container`]}`} xs={4} xl={4} xxl={4} lg={5}>

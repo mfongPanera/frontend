@@ -6,43 +6,16 @@ import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import styles from "./../../Styles/detailedview.module.css";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  setCase_,
-  setAdjustedPar,
-  setBag,
-  setEa,
-  setGal,
-  setLbs,
-  setOpenOrders,
-  setOz,
-  setSleeves,
-  setTotalCases,
-  setTray,
-  setOrder,
-  setAdjustedOrder,
-  setSales,
-  setYield,
-  refetchUpdatedData,
-  updateToastMessage,
-  setTotalOz,
-  setTotalLBS,
-  setTotalLiters,
-  setTotalTray,
-  setTotalML,
-  setTotalGAL,
-  setTotalGM,
-  setTotalEach,
-  setTotalSleeves,
-  setTotalBags,
-} from "../../app/dataReducer";
+import { setCase_, setAdjustedPar, setBag, setEa, setGal, setLbs, setOpenOrders, setOz, setSleeves, setTotalCases, setTray, setOrder, setAdjustedOrder, setSales,
+setYield, refetchUpdatedData, updateToastMessage, setTotalOz, setTotalLBS, setTotalLiters, setTotalTray, setTotalML, setTotalGAL, setTotalGM, setTotalEach, setTotalSleeves,
+setTotalBags} from "../../app/dataReducer";
 import Form from "react-bootstrap/Form";
 
 function InventoryForm() {
+
   const shop = "Panera";
   const order_ = useSelector((state) => state.dataReducer.order_);
-  const adjusted_order_ = useSelector(
-    (state) => state.dataReducer.adjustedOrder
-  );
+  const adjusted_order_ = useSelector((state) => state.dataReducer.adjustedOrder);
   const openOrders = useSelector((state) => state.dataReducer.openOrders);
   const adjustedPar = useSelector((state) => state.dataReducer.adjustedPar);
   const case_ = useSelector((state) => state.dataReducer.case_);
@@ -52,6 +25,7 @@ function InventoryForm() {
   const ea = useSelector((state) => state.dataReducer.ea);
   const oz = useSelector((state) => state.dataReducer.oz);
   const gal = useSelector((state) => state.dataReducer.gal);
+  const gm = useSelector((state)=>state.dataReducer.gm);
   const sleeves = useSelector((state) => state.dataReducer.sleeves);
   const totalCases = useSelector((state) => state.dataReducer.totalCases);
   const sales = useSelector((state) => state.dataReducer.sales);
@@ -70,6 +44,153 @@ function InventoryForm() {
   const totalGM = useSelector((state)=> state.dataReducer.totalGM);
   const totalBags = useSelector((state)=> state.dataReducer.totalBags);
   const username = useSelector((state)=>state.dataReducer.userName);
+
+  const getConversions = async () => {
+    try {
+      const uri='http://localhost:5000/getConversions';
+      const responses = await fetch(uri);
+      const conversions = await responses.json();
+      return conversions;
+    } catch(err) {
+      console.log(err)
+    }
+  };
+
+  const calculateFields = async (unlock) => {
+    let caSe = case_ === '' ? parseFloat(selectedData.case_) : parseFloat(case_); 
+    let each = ea === '' ? parseFloat(selectedData.ea) : parseFloat(ea)  
+    let ounce = oz === '' ? parseFloat(selectedData.oz) : parseFloat(oz) 
+    let pounds = lbs==='' ? parseFloat(selectedData.lb) : parseFloat(lbs)
+    let bags = bag===''? parseFloat(selectedData.bag): parseFloat(bag)
+    let gallons = gal===''?parseFloat(selectedData.gal):parseFloat(gal)
+    let trays = tray=='' ? parseFloat(selectedData.tray):parseFloat(tray)
+    let sleeve = sleeves==''? parseFloat(selectedData.sleeves):parseFloat(sleeves)
+    let gram = gm==''? parseFloat(selectedData.gm):parseFloat(gm)
+    let pack = parseFloat(selectedData.pack)
+    let size = parseFloat(selectedData.size_)
+    let unitOfMeasurement = selectedData.uom
+    let unlocks = unlock.split('-')
+    let totalCase=0
+    let totalEach=0
+    let totalLBS=0
+    let totalOZ = 0
+    let totalBags=0
+    let totalGal=0
+    let totalTray=0
+    let totalSleeve = 0
+    let totalGM =0
+    const conversions = await getConversions();
+    let oztolbs = parseFloat(conversions.oztolbs);
+    let mltoltr = parseFloat(conversions.mltoltr);
+    let ltrtooz = parseFloat(conversions.ltrtooz);
+    let mltooz = parseFloat(conversions.mltooz);
+    let ltrtogal = parseFloat(conversions.ltrtogal);
+    let grtooz = parseFloat(conversions.grtooz);
+    for(let i=0;i<unlocks.length;i++) {
+      if(unlocks[i]==='CASE') {
+        totalCase+=caSe
+        
+      }
+      else if(unlocks[i] === 'EA') {
+        if(unitOfMeasurement == 'CT') {
+          totalCase+=(each/(pack*size))
+        } else {
+          totalCase+=(each/pack)
+        }
+      }
+      else if(unlocks[i]==='BAGS') {
+        totalCase+=(bags/pack)
+      }
+      
+      else if(unlocks[i] === 'LBS') {
+        if(unitOfMeasurement==='OZ') {
+          totalCase+=(pounds*oztolbs/(pack*size))
+        } else {
+          totalCase+=(pounds/(pack*size))
+        }
+      }
+      else if(unlocks[i] === 'OZ') {
+        if(unitOfMeasurement==='LBS') {
+          totalCase+=(ounce/(pack*size*oztolbs))
+        } else {
+          totalCase+=(ounce/(pack*size))
+        }
+      }
+      else if(unlocks[i] === 'GAL') {
+        totalCase+=(gallons/(pack*size))
+      }
+      else if(unlocks[i]==='TRAY') {
+        totalCase+=(trays/4)
+      }
+      else if(unlocks[i]==='SLEEVE') {
+        console.log(sleeve)
+        totalCase+=(sleeve/pack)
+      }
+      else if(unlocks[i]==='GRAM') {
+        
+      }
+    }
+    if(unlocks.includes('EA')) {
+      if(unitOfMeasurement =='OZ' || unitOfMeasurement=='LBS' || unitOfMeasurement=='GAL' || unitOfMeasurement=='GM' 
+      || unitOfMeasurement=='ML') {
+        totalEach=totalCase*pack
+      } else {
+        totalEach=totalCase*pack*size
+      }
+    }
+    if(unlocks.includes('BAGS')) {
+      totalBags= totalCase*pack
+    }
+    if(unlocks.includes('LBS')) {
+      totalLBS=totalCase*pack*size
+      if(unitOfMeasurement==='OZ'){
+        totalLBS=totalLBS/oztolbs
+      }
+    }
+    if(unlocks.includes('OZ')) {
+      totalOZ = totalCase*pack*size
+      if(unitOfMeasurement==='LBS') {
+        totalOZ=totalOZ*oztolbs
+      }
+    }
+    if(unlocks.includes('GAL')) {
+      totalGal = totalCase*pack*size
+    }
+    if(unlocks.includes('TRAY')) {
+      totalTray = totalCase*4
+    }
+    if(unlocks.includes('SLEEVE')) {
+      totalSleeve = totalCase*pack;
+    }
+    
+    dispatch(setTotalBags(totalBags))
+    dispatch(setTotalCases(totalCase))
+    dispatch(setTotalLBS(totalLBS))
+    dispatch(setTotalOz(totalOZ))
+    dispatch(setTotalEach(totalEach))
+    dispatch(setTotalGAL(totalGal))
+    dispatch(setTotalTray(totalTray))
+    dispatch(setTotalSleeves(totalSleeve))
+    console.log(selectedData)
+  }
+
+  //for dynamically disabling fields 
+  const disable = (unlockfields,feild)=>{
+    if(unlockfields===null) {
+      return false 
+    } else {
+      if(unlockfields[0]==='N/A') {
+        return false
+      } else {
+        if(unlockfields.find((element)=> element===feild)) {
+          return false 
+        } else {
+          return true
+        }
+      } 
+    }
+  }
+
   // For live calculations of adjusted order and order
   useEffect(() => {
     if (selectedData) {
@@ -81,6 +202,7 @@ function InventoryForm() {
     }
   }, [selectedData]);
 
+  //for loading images
   const tryRequire = () => {
     try {
       return require(`./../images/${selectedData.location_}/${selectedData.vendor_id}.jpg`);
@@ -88,6 +210,7 @@ function InventoryForm() {
       return require(`./../images/${selectedData.shopid}.svg`);
     }
   };
+
   useEffect(() => {
     if (selectedData) {
       // ORDER //
@@ -147,190 +270,12 @@ function InventoryForm() {
     }
   }, [totalCases, adjustedPar, order_]);
 
-  const calculateTotalOZ = (selectedData) => {
-    let total_oz = null;
-    let measurement = selectedData.measurement;
-    let pack = selectedData.pack;
-    let size = selectedData.size_;
-    let ltToOz = selectedData.ltrtooz;
-    if(measurement === "OZ") {
-      if(pack == null || size == null) {
-        total_oz = 0;
-      } else {
-        total_oz = Number(pack)*Number(size)
-      }
-    } else if(measurement === "ML") {
-      if(pack == null || size == null) {
-        total_oz = 0;
-      } else {
-        total_oz = ((Number(pack)*Number(size))/1000)*Number(ltToOz)
-      }
-    } else {
-      total_oz=0;
-    }
-    dispatch(setTotalOz(total_oz))
-  }
-  const calculateTotalLBS = (selectedData) => {
-    let total_lbs = null;
-    let measurement = selectedData.measurement;
-    let pack = selectedData.pack;
-    let size = selectedData.size_;
-    let oztolbs = selectedData.oztolbs;
-    if(measurement === "LB") {
-      if(pack == null || size == null) {
-        total_lbs = 0;
-      } else {
-        total_lbs = Number(pack) * Number(size);
-      }
-    } else if(measurement === 'OZ'){
-      if(pack==null || size == null) {
-        total_lbs=0;
-      } else {
-        total_lbs = (Number(pack)*Number(size))/Number(oztolbs);
-      }
-    } else {
-      total_lbs = 0;
-    }
-    dispatch(setTotalLBS(total_lbs))
-  }
-
-  const calculateTotalLiters = (selectedData) => {
-    let total_liters = null;
-    let measurement = selectedData.measurement;
-    let pack = selectedData.pack;
-    let size = selectedData.size_;
-    let mltol = selectedData.mltoltr;
-    if(measurement === "L") {
-      if(pack==null || size == null) {
-        total_liters=0;
-      } else {
-        total_liters = (Number(pack)*Number(size));
-      }
-    } else if(measurement === "ML") {
-      if(pack == null || size==null) {
-        total_liters=0;
-      } else {
-        total_liters = (Number(pack)*Number(size))/Number(mltol);
-      }
-    } else {
-      total_liters = 0;
-    }
-    dispatch(setTotalLiters(total_liters))
-  }
-  const calculateTotalTray = (selectedData) => {
-    let total_tray = null;
-    let measurement = selectedData.measurement;
-    let pack = selectedData.pack;
-    let size = selectedData.size_;
-    if(measurement === "TRAY") {
-      if(pack==null || size==null) {
-        total_tray = 0;
-      } else {
-       total_tray = (Number(pack)*Number(size)); 
-      }
-    } else {
-      total_tray = 0;
-    }
-    dispatch(setTotalTray(total_tray))
-  }
-  const calculateTotalML = (selectedData) => {
-    let total_ml = null;
-    let measurment = selectedData.measurement;
-    let pack = selectedData.pack;
-    let size = selectedData.size_;
-    if(measurment === "ML") {
-      if(pack==null || size==null) {
-        total_ml =0;
-      } else {
-        total_ml = (Number(pack)*Number(size));
-      }
-    } else {
-      total_ml = 0;
-    }
-    dispatch(setTotalML(total_ml))
-  }
-  const calculateTotalGAL = (selectedData) => {
-    let total_GAL = null;
-    let measurement = selectedData.measurement;
-    let pack = selectedData.pack;
-    let size = selectedData.size_;
-    if(measurement === "GAL") {
-      if(pack==null || size==null) {
-        total_GAL = 0;
-      } else {
-        total_GAL = (Number(pack)*Number(size));
-      }
-    } else {
-      total_GAL =0;
-    }
-    dispatch(setTotalGAL(totalGAL))
-  }
-  const calculateTotalGM = (selectedData) => {
-    let total_GM = null;
-    let measurement = selectedData.measurement;
-    let pack = selectedData.pack;
-    let size = selectedData.size_;
-    if(measurement === "GM") {
-      if(pack==null || size==null) {
-        total_GM = 0;
-      } else {
-        total_GM = (Number(pack)*Number(size));
-      }
-    } else {
-      total_GM = 0;
-    }
-    dispatch(setTotalGM(total_GM))
-  }
   // For live calculations of total cases
   useEffect(() => {
     if (selectedData) {
-      let total_cases_ = 0;
-      let total_lbs_ = 0;
-      let total_oz_ = 0;
-      let total_bags_ =0;
-      let _case_ = case_ == '' ? selectedData.case_ : case_;
-      let lbs_ = lbs == '' ? selectedData.lb : lbs;
-      let bag_ = bag =='' ? selectedData.bag : bag;
-      let tray_ = tray == null ? selectedData.tray : tray;
-      let ea_ = ea == null ? selectedData.ea : ea;
-      let oz_ = oz == '' ? selectedData.oz : oz;
-      let gal_ = gal == null ? selectedData.gal : gal;
-      let sleeves_ = sleeves == null ? selectedData.sleeves : sleeves;
-      let pack = selectedData.pack;
-      let size = selectedData.size_;
-      let measurement = selectedData.measurement;
-      let oztolbs = selectedData.oztolbs;
-      if (selectedData.pack == null || selectedData.size_ == null) {
-        total_cases_ = case_;
-      } else {
-        /*total_cases_ =
-          Number(_case_) +
-          (Number(lbs_) +
-            Number(bag_) +
-            Number(tray_) +
-            Number(ea_) +
-            Number(oz_) +
-            Number(gal_) +
-            Number(sleeves_)) /
-            Number(selectedData.pack);*/
-        if(measurement === "LB") {
-          total_cases_ = parseFloat(_case_)+(parseFloat(bag_)/(parseFloat(pack)*parseFloat(size)))+(parseFloat(lbs_)/(parseFloat(pack)*parseFloat(size)))
-          total_lbs_ = parseFloat(lbs_) + (parseFloat(_case_)*(parseFloat(pack)*parseFloat(size)))+(parseFloat(bag_)*parseFloat(size))
-          total_bags_ = parseFloat(bag_) + (parseFloat(_case_)*parseFloat(pack))+(parseFloat(lbs_)/parseFloat(size))
-          total_oz_ = (parseFloat(lbs_)*oztolbs)+parseFloat(oz_)+(parseFloat(_case_)*(parseFloat(pack)*parseFloat(size)))
-        } else if (measurement === "OZ") {
-          total_cases_ = parseFloat(_case_) + (parseFloat(lbs_)/((parseFloat(pack)*parseFloat(size))/oztolbs))+
-                         ((parseFloat(oz_)/oztolbs)/((parseFloat(pack)*parseFloat(size))/oztolbs));
-          total_lbs_ = parseFloat(lbs_) + (parseFloat(oz_)/parseFloat(oztolbs)) +(parseFloat(_case_)*((parseFloat(pack)*parseFloat(size)/parseFloat(oztolbs))));
-          total_oz_ = parseFloat(oz_)+(parseFloat(lbs_)*parseFloat(oztolbs))+(parseFloat(_case_)*(parseFloat(pack)*parseFloat(size)));
-        }
-      }
-
-      dispatch(setTotalCases(total_cases_));
-      dispatch(setTotalLBS(total_lbs_))
-      dispatch(setTotalOz(total_oz_));
-      dispatch(setTotalBags(total_bags_))
-    }
+      let unlock = selectedData.unlock;
+      calculateFields(unlock)
+     }
   }, [case_, lbs, bag, tray, ea, oz, gal, sleeves, totalCases]);
   useEffect(() => {
     if (selectedData) {
@@ -344,9 +289,7 @@ function InventoryForm() {
       dispatch(setOpenOrders(""));
       dispatch(setOz(""));
       dispatch(setSleeves(""));
-      dispatch(
-        setTotalCases(totalCases ? totalCases : selectedData.totalcase)
-      );
+      dispatch(setTotalCases(totalCases ? totalCases : selectedData.totalcase));
       dispatch(setAdjustedOrder(""));
       dispatch(setOrder(""));
       dispatch(setSales(""));
@@ -362,30 +305,29 @@ function InventoryForm() {
       dispatch(setTotalSleeves(totalSleeves ? totalSleeves : selectedData.totalsleeves))
     }
   }, [selectedData]);
+
+  //For updatinf Inventory in DB
   const updateInventory = async (e) => {
     e.preventDefault();
     const foodpro_id = selectedData.foodpro_id;
     //const date = addDays(new Date(selectedData.created_date),1).toLocaleDateString("en-US").replaceAll("/", "-")
     const date = selectedData.created_date;
-    let _case_ = case_ == "" ? selectedData.case_ : case_;
-    let lbs_ = lbs == "" ? selectedData.lb : lbs;
-    let bag_ = bag == "" ? selectedData.bag : bag;
-    let tray_ = tray == "" ? selectedData.tray : tray;
-    let ea_ = ea == "" ? selectedData.ea : ea;
-    let oz_ = oz == "" ? selectedData.oz : oz;
-    let gal_ = gal == "" ? selectedData.gal : gal;
-    let sleeves_ = sleeves == "" ? selectedData.sleeves : sleeves;
+    let _case_ = case_ === "" ? selectedData.case_ : case_;
+    let lbs_ = lbs === "" ? selectedData.lb : lbs;
+    let bag_ = bag === "" ? selectedData.bag : bag;
+    let tray_ = tray === "" ? selectedData.tray : tray;
+    let ea_ = ea === "" ? selectedData.ea : ea;
+    let oz_ = oz === "" ? selectedData.oz : oz;
+    let gal_ = gal === "" ? selectedData.gal : gal;
+    let sleeves_ = sleeves === "" ? selectedData.sleeves : sleeves;
     let adjusted_par = adjustedPar ? adjustedPar : selectedData.adjustedpar;
     let open_orders = openOrders ? openOrders : selectedData.openorders;
     let sales_ = sales ? sales : selectedData.sales;
     let _yield_ = yield_ ? yield_ : selectedData.yeild;
-    let adjusted_order = adjusted_order_
-      ? adjusted_order_
-      : selectedData.adjustedorder;
+    let adjusted_order = adjusted_order_ ? adjusted_order_ : selectedData.adjustedorder;
     
     try {
-      const response = await fetch(
-        `http://localhost:5000/update_existing_inventory/${foodpro_id}`,
+      const response = await fetch(`http://localhost:5000/update_existing_inventory/${foodpro_id}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -406,12 +348,19 @@ function InventoryForm() {
             total_case: totalCases,
             total_lb: totalLBS,
             total_bags: totalBags,
+            total_ea:totalEach,
+            total_oz:totalOZ,
+            total_gal:totalGAL,
+            total_tray:totalTray,
+            total_sleeve:totalSleeves,
+            total_gm:totalGM,
             sales: sales_,
             yield: _yield_,
             updatedBy:username
           }),
         }
       );
+      console.log(selectedData)
       dispatch(
         updateToastMessage({
           type: "SUCCESS",
@@ -435,22 +384,12 @@ function InventoryForm() {
       console.error(err.message);
     }
   };
+
   return (
-    <Container
-      className={`${styles[`${shop}_detailed_view_inventory_form_container`]}`}
-    >
-      <Form
-        onSubmit={(e) => {
-          updateInventory(e);
-        }}
-      >
+    <Container className={`${styles[`${shop}_detailed_view_inventory_form_container`]}`}>
+      <Form onSubmit={(e) => {updateInventory(e);}}>
         <Row>
-          <Col
-            md={{ span: 12, offset: 0 }}
-            className={`${
-              styles[`${shop}_detailed_view_inventory_form_title`]
-            }`}
-          >
+          <Col md={{ span: 12, offset: 0 }} className={`${styles[`${shop}_detailed_view_inventory_form_title`]}`}>
             {selectedData ? selectedData.vendor_id : "VENDOR ID"} -{" "}
             {selectedData ? selectedData.description : "INVENTORY DESCRIPTION"}
           </Col>
@@ -459,852 +398,290 @@ function InventoryForm() {
         <Row>
           <Col md={{ span: 12, offset: 0 }}>
             <Row style={{ paddingTop: 1.75 }}>
-              <Col
-                className={`${
-                  styles[`${shop}_detailed_view_inventory_form_image`]
-                }`}
-                md={{ span: 6, offset: 0 }}
-                xl={{ span: 4, offset: 0 }}
-              >
-                <Image
-                  style={{ aspectRatio: 1, maxHeight: "90%", maxWidth: "90%" }}
-                  src={tryRequire()}
-                  rounded
-                  sizes="50"
-                ></Image>
+              <Col className={`${styles[`${shop}_detailed_view_inventory_form_image`]}`} md={{ span: 6, offset: 0 }} xl={{ span: 4, offset: 0 }}>
+                <Image style={{ aspectRatio: 1, maxHeight: "90%", maxWidth: "90%" }} src={tryRequire()} rounded sizes="50"></Image>
               </Col>
               <Col md={6} className={`${styles[`${shop}_ipad_view`]}`}>
                 <Row>
-                  <Row
-                    className={`${
-                      styles[
-                        `${shop}_detailed_view_inventory_form_ipad_view_input_row`
-                      ]
-                    }`}
-                  >
-                    <Col
-                      className={`${
-                        styles[
-                          `${shop}_detailed_view_inventory_form_ipad_View_label`
-                        ]
-                      }`}
-                    >
+                  <Row className={`${styles[`${shop}_detailed_view_inventory_form_ipad_view_input_row`]}`}>
+                    <Col className={`${styles[`${shop}_detailed_view_inventory_form_ipad_View_label`]}`}>
                       SALES
                     </Col>
                   </Row>
-                  <Row
-                    className={`${
-                      styles[
-                        `${shop}_detailed_view_inventory_form_ipad_view_input_row`
-                      ]
-                    }`}
-                  >
-                    <Col
-                      className={`${
-                        styles[
-                          `${shop}_detailed_view_inventory_form_ipad_view_col`
-                        ]
-                      }`}
-                    >
-                      <Form.Control
-                        name={"SALES"}
-                        placeholder={
-                          selectedData ? selectedData.openorders : ""
-                        }
-                        className={`${
-                          styles[
-                            `${shop}_detailed_view_inventory_form_ipad_view_input`
-                          ]
-                        }`}
-                        pattern="^[0-9]*$"
+                  <Row className={`${styles[`${shop}_detailed_view_inventory_form_ipad_view_input_row`]}`}>
+                    <Col className={`${styles[`${shop}_detailed_view_inventory_form_ipad_view_col`]}`}>
+                      <Form.Control name={"SALES"} placeholder={selectedData ? selectedData.openorders : ""}
+                        className={`${styles[`${shop}_detailed_view_inventory_form_ipad_view_input`]}`}
+                        pattern="^[0-9]*$" value={sales}
                         onChange={(e) => {
                           if (!e.target.validity.patternMismatch) {
                             dispatch(setSales(e.target.value));
-                          }
-                        }}
-                        value={sales}
+                          }}}
                       ></Form.Control>
                     </Col>
                   </Row>
-                  <Row
-                    className={`${
-                      styles[
-                        `${shop}_detailed_view_inventory_form_ipad_view_input_row`
-                      ]
-                    }`}
-                  >
-                    <Col
-                      className={`${
-                        styles[
-                          `${shop}_detailed_view_inventory_form_ipad_View_label`
-                        ]
-                      }`}
-                    >
+                  <Row className={`${styles[`${shop}_detailed_view_inventory_form_ipad_view_input_row`]}`}>
+                    <Col className={`${styles[`${shop}_detailed_view_inventory_form_ipad_View_label`]}`}>
                       ADJUSTED SALES
                     </Col>
                   </Row>
-                  <Row
-                    className={`${
-                      styles[
-                        `${shop}_detailed_view_inventory_form_ipad_view_input_row`
-                      ]
-                    }`}
-                  >
-                    <Col
-                      className={`${
-                        styles[
-                          `${shop}_detailed_view_inventory_form_ipad_view_col`
-                        ]
-                      }`}
-                    >
-                      <Form.Control
-                        name={"ADJUSTED_SALES"}
-                        placeholder={"Calculated Adjusted Sales"}
-                        className={`${
-                          styles[
-                            `${shop}_detailed_view_inventory_form_ipad_view_input`
-                          ]
-                        }`}
+                  <Row className={`${styles[`${shop}_detailed_view_inventory_form_ipad_view_input_row`]}`}>
+                    <Col className={`${styles[`${shop}_detailed_view_inventory_form_ipad_view_col`]}`}>
+                      <Form.Control name={"ADJUSTED_SALES"} placeholder={"Calculated Adjusted Sales"}
+                        className={`${styles[`${shop}_detailed_view_inventory_form_ipad_view_input`]}`}
                         disabled
                       ></Form.Control>
                     </Col>
                   </Row>
-                  <Row
-                    className={`${
-                      styles[
-                        `${shop}_detailed_view_inventory_form_ipad_view_input_row`
-                      ]
-                    }`}
-                  >
-                    <Col
-                      className={`${
-                        styles[
-                          `${shop}_detailed_view_inventory_form_ipad_View_label`
-                        ]
-                      }`}
-                    >
+                  <Row className={`${styles[`${shop}_detailed_view_inventory_form_ipad_view_input_row`]}`}>
+                    <Col className={`${styles[`${shop}_detailed_view_inventory_form_ipad_View_label`]}`}>
                       YIELD
                     </Col>
                   </Row>
-                  <Row
-                    className={`${
-                      styles[
-                        `${shop}_detailed_view_inventory_form_ipad_view_input_row`
-                      ]
-                    }`}
-                  >
-                    <Col
-                      className={`${
-                        styles[
-                          `${shop}_detailed_view_inventory_form_ipad_view_col`
-                        ]
-                      }`}
-                    >
-                      <Form.Control
-                        style={{ marginBottom: 0 }}
-                        name={"YIELD"}
-                        pattern="^[0-9]*$"
+                  <Row className={`${styles[`${shop}_detailed_view_inventory_form_ipad_view_input_row`]}`}>
+                    <Col className={`${styles[`${shop}_detailed_view_inventory_form_ipad_view_col`]}`}>
+                      <Form.Control style={{ marginBottom: 0 }} name={"YIELD"} pattern="^[0-9]*$"
+                        placeholder={selectedData ? selectedData.yeild : ""} value={yield_}
+                        className={`${styles[`${shop}_detailed_view_inventory_form_ipad_view_input`]}`}
                         onChange={(e) => {
                           if (!e.target.validity.patternMismatch) {
                             dispatch(setYield(e.target.value));
-                          }
-                        }}
-                        placeholder={selectedData ? selectedData.yeild : ""}
-                        value={yield_}
-                        className={`${
-                          styles[
-                            `${shop}_detailed_view_inventory_form_ipad_view_input`
-                          ]
-                        }`}
+                          }}}
                       ></Form.Control>
                     </Col>
                   </Row>
                 </Row>
               </Col>
               <Col md={12} xl={8}>
-                <Row
-                  style={{ paddingTop: 0 }}
-                  className={`${
-                    styles[`${shop}_detailed_view_inventory_form_row`]
-                  }`}
-                >
-                  <Col
-                    xl={3}
-                    md={6}
-                    className={`${
-                      styles[`${shop}_detailed_view_inventory_form_label`]
-                    }`}
-                  >
+                <Row style={{ paddingTop: 0 }} className={`${styles[`${shop}_detailed_view_inventory_form_row`]}`}>
+                  <Col xl={3} md={6} className={`${styles[`${shop}_detailed_view_inventory_form_label`]}`}>
                     PACK
                   </Col>
-                  <Col
-                    xl={9}
-                    md={6}
-                    className={`${
-                      styles[`${shop}_detailed_view_inventory_form_input_col`]
-                    }`}
-                  >
-                    <Form.Control
-                      name={"PACK"}
-                      value={selectedData ? selectedData.pack : ""}
-                      className={`${
-                        styles[`${shop}_detailed_view_inventory_form_input`]
-                      }`}
-                      disabled
+                  <Col xl={9} md={6} className={`${styles[`${shop}_detailed_view_inventory_form_input_col`]}`}>
+                    <Form.Control name={"PACK"} value={selectedData ? selectedData.pack : ""}
+                      className={`${styles[`${shop}_detailed_view_inventory_form_input`]}`} disabled
                     ></Form.Control>
                   </Col>
                 </Row>
-                <Row
-                  className={`${
-                    styles[`${shop}_detailed_view_inventory_form_row`]
-                  }`}
-                >
-                  <Col
-                    xl={3}
-                    md={6}
-                    className={`${
-                      styles[`${shop}_detailed_view_inventory_form_label`]
-                    }`}
-                  >
+                <Row className={`${styles[`${shop}_detailed_view_inventory_form_row`]}`}>
+                  <Col xl={3} md={6} className={`${styles[`${shop}_detailed_view_inventory_form_label`]}`}>
                     SIZE
                   </Col>
-                  <Col
-                    xl={3}
-                    md={6}
-                    className={`${
-                      styles[`${shop}_detailed_view_inventory_form_input_col`]
-                    }`}
-                  >
-                    <Form.Control
-                      name={"SIZE"}
-                      value={selectedData ? selectedData.size_ : ""}
-                      className={`${
-                        styles[`${shop}_detailed_view_inventory_form_input`]
-                      }`}
-                      disabled
+                  <Col xl={3} md={6} className={`${styles[`${shop}_detailed_view_inventory_form_input_col`]}`}>
+                    <Form.Control name={"SIZE"} value={selectedData ? selectedData.size_ : ""} disabled
+                      className={`${styles[`${shop}_detailed_view_inventory_form_input`]}`}
                     ></Form.Control>
                   </Col>
-                  <Col
-                    xl={4}
-                    md={6}
-                    className={`${
-                      styles[`${shop}_detailed_view_inventory_form_label`]
-                    }`}
-                  >
+                  <Col xl={4} md={6} className={`${styles[`${shop}_detailed_view_inventory_form_label`]}`}>
                     MEASUREMENT
                   </Col>
-                  <Col
-                    xl={2}
-                    md={6}
-                    className={`${
-                      styles[`${shop}_detailed_view_inventory_form_input_col`]
-                    }`}
-                  >
-                    <Form.Control
-                      name={"MEASUREMENT"}
-                      value={selectedData ? selectedData.measurement : ""}
-                      className={`${
-                        styles[`${shop}_detailed_view_inventory_form_input`]
-                      }`}
-                      disabled
+                  <Col xl={2} md={6} className={`${styles[`${shop}_detailed_view_inventory_form_input_col`]}`}>
+                    <Form.Control name={"MEASUREMENT"} value={selectedData ? selectedData.measurement : ""}
+                      className={`${styles[`${shop}_detailed_view_inventory_form_input`]}`} disabled
                     ></Form.Control>
                   </Col>
                 </Row>
-                <Row
-                  className={`${
-                    styles[`${shop}_detailed_view_inventory_form_row`]
-                  }`}
-                >
-                  <Col
-                    xl={3}
-                    md={6}
-                    className={`${
-                      styles[`${shop}_detailed_view_inventory_form_label`]
-                    }`}
-                  >
+                <Row className={`${styles[`${shop}_detailed_view_inventory_form_row`]}`}>
+                  <Col xl={3} md={6} className={`${styles[`${shop}_detailed_view_inventory_form_label`]}`}>
                     UOM
                   </Col>
-                  <Col
-                    xl={3}
-                    md={6}
-                    className={`${
-                      styles[`${shop}_detailed_view_inventory_form_input_col`]
-                    }`}
-                  >
-                    <Form.Control
-                      name={"UOM"}
-                      value={selectedData ? selectedData.uom : ""}
-                      className={`${
-                        styles[`${shop}_detailed_view_inventory_form_input`]
-                      }`}
-                      disabled
+                  <Col xl={3} md={6} className={`${styles[`${shop}_detailed_view_inventory_form_input_col`]}`}>
+                    <Form.Control name={"UOM"} value={selectedData ? selectedData.uom : ""} disabled
+                      className={`${styles[`${shop}_detailed_view_inventory_form_input`]}`}
                     ></Form.Control>
                   </Col>
-                  <Col
-                    xl={4}
-                    md={6}
-                    className={`${
-                      styles[`${shop}_detailed_view_inventory_form_label`]
-                    }`}
-                  >
+                  <Col xl={4} md={6} className={`${styles[`${shop}_detailed_view_inventory_form_label`]}`}>
                     SYSTEM PAR
                   </Col>
-                  <Col
-                    xl={2}
-                    md={6}
-                    className={`${
-                      styles[`${shop}_detailed_view_inventory_form_input_col`]
-                    }`}
-                  >
-                    <Form.Control
-                      name={"SYSTEM_PAR"}
-                      value={selectedData ? selectedData.system_par : ""}
-                      className={`${
-                        styles[`${shop}_detailed_view_inventory_form_input`]
-                      }`}
-                      disabled
+                  <Col xl={2} md={6} className={`${styles[`${shop}_detailed_view_inventory_form_input_col`]}`}>
+                    <Form.Control name={"SYSTEM_PAR"} value={selectedData ? selectedData.system_par : ""}
+                      className={`${styles[`${shop}_detailed_view_inventory_form_input`]}`} disabled
                     ></Form.Control>
                   </Col>
                 </Row>
-                <Row
-                  className={`${
-                    styles[`${shop}_detailed_view_inventory_form_row`]
-                  }`}
-                >
-                  <div
-                    className={`${
-                      styles[
-                        `${shop}_detailed_view_inventory_form_horizontal_line`
-                      ]
-                    }`}
-                  ></div>
+                <Row className={`${styles[`${shop}_detailed_view_inventory_form_row`]}`}>
+                  <Col xl={3} md={6} className={`${styles[`${shop}_detailed_view_inventory_form_label`]}`}>
+                    SYGMA STATUS
+                  </Col>
+                  <Col xl={3} md={6} className={`${styles[`${shop}_detailed_view_inventory_form_input_col`]}`}>
+                    <Form.Control name={"SYGMA_STATUS"} value={selectedData ? selectedData.sygma_status : ""} disabled
+                      className={`${styles[`${shop}_detailed_view_inventory_form_input`]}`}
+                    ></Form.Control>
+                  </Col>
+                  <Col xl={4} md={6} className={`${styles[`${shop}_detailed_view_inventory_form_label`]}`}>
+                    IBOH STATUS
+                  </Col>
+                  <Col xl={2} md={6} className={`${styles[`${shop}_detailed_view_inventory_form_input_col`]}`}>
+                    <Form.Control name={"IBOH_STATUS"} value={selectedData ? selectedData.iboh_status : ""}
+                      className={`${styles[`${shop}_detailed_view_inventory_form_input`]}`} disabled
+                    ></Form.Control>
+                  </Col>
                 </Row>
-                <Row
-                  className={`${
-                    styles[`${shop}_detailed_view_inventory_form_row`]
-                  }`}
-                >
-                  <Col
-                    xl={6}
-                    md={6}
-                    className={`${
-                      styles[`${shop}_detailed_view_inventory_form_label`]
-                    }`}
-                  >
+                <Row className={`${styles[`${shop}_detailed_view_inventory_form_row`]}`}>
+                  <div className={`${styles[`${shop}_detailed_view_inventory_form_horizontal_line`]}`}></div>
+                </Row>
+                <Row className={`${styles[`${shop}_detailed_view_inventory_form_row`]}`}>
+                  <Col xl={6} md={6} className={`${styles[`${shop}_detailed_view_inventory_form_label`]}`}>
                     OPEN ORDERS
                   </Col>
-                  <Col
-                    xl={6}
-                    md={6}
-                    className={`${
-                      styles[`${shop}_detailed_view_inventory_form_input_col`]
-                    }`}
-                  >
-                    <Form.Control
-                      name={"OPEN_ORDERS"}
-                      placeholder={selectedData ? selectedData.openorders : ""}
-                      value={openOrders}
-                      className={`${
-                        styles[`${shop}_detailed_view_inventory_form_input`]
-                      }`}
-                      pattern="^[0-9\.]*$"
+                  <Col xl={6} md={6} className={`${styles[`${shop}_detailed_view_inventory_form_input_col`]}`}>
+                    <Form.Control name={"OPEN_ORDERS"} placeholder={selectedData ? selectedData.openorders : ""}
+                      value={openOrders} pattern="^[0-9\.]*$"
+                      className={`${styles[`${shop}_detailed_view_inventory_form_input`]}`}
                       onChange={(e) => {
                         if (!e.target.validity.patternMismatch) {
                           dispatch(setOpenOrders(e.target.value));
-                        }
-                      }}
+                        }}}
                     ></Form.Control>
                   </Col>
                 </Row>
-                <Row
-                  className={`${
-                    styles[`${shop}_detailed_view_inventory_form_row`]
-                  }`}
-                >
-                  <Col
-                    xl={6}
-                    md={6}
-                    className={`${
-                      styles[`${shop}_detailed_view_inventory_form_label`]
-                    }`}
-                  >
+                <Row className={`${styles[`${shop}_detailed_view_inventory_form_row`]}`}>
+                  <Col xl={6} md={6} className={`${styles[`${shop}_detailed_view_inventory_form_label`]}`}>
                     ADJUSTED PAR
                   </Col>
-                  <Col
-                    xl={6}
-                    md={6}
-                    className={`${
-                      styles[`${shop}_detailed_view_inventory_form_input_col`]
-                    }`}
-                  >
-                    <Form.Control
-                      placeholder={
-                        selectedData ? selectedData.adjustedpar : ""
-                      }
-                      name={"ADJUSTED_PAR"}
-                      value={adjustedPar}
-                      className={`${
-                        styles[`${shop}_detailed_view_inventory_form_input`]
-                      }`}
-                      pattern="^[0-9\.]*$"
+                  <Col xl={6} md={6} className={`${styles[`${shop}_detailed_view_inventory_form_input_col`]}`}>
+                    <Form.Control placeholder={selectedData ? selectedData.adjustedpar : ""}
+                      name={"ADJUSTED_PAR"} value={adjustedPar} pattern="^[0-9\.]*$"
+                      className={`${styles[`${shop}_detailed_view_inventory_form_input`]}`}
                       onChange={(e) => {
                         if (!e.target.validity.patternMismatch) {
                           dispatch(setAdjustedPar(e.target.value));
-                        }
-                      }}
+                        }}}
                     ></Form.Control>
                   </Col>
                 </Row>
-                <Row
-                  className={`${
-                    styles[`${shop}_detailed_view_inventory_form_row`]
-                  }`}
-                >
-                  <div
-                    className={`${
-                      styles[
-                        `${shop}_detailed_view_inventory_form_horizontal_line`
-                      ]
-                    }`}
-                  ></div>
+                <Row className={`${styles[`${shop}_detailed_view_inventory_form_row`]}`}>
+                  <div className={`${styles[`${shop}_detailed_view_inventory_form_horizontal_line`]}`}></div>
                 </Row>
-                <Row
-                  className={`${
-                    styles[`${shop}_detailed_view_inventory_form_row`]
-                  }`}
-                >
-                  <Col
-                    xl={12}
-                    md={12}
-                    style={{ justifyContent: "center" }}
-                    className={`${
-                      styles[`${shop}_detailed_view_inventory_form_label`]
-                    }`}
-                  >
+                <Row className={`${styles[`${shop}_detailed_view_inventory_form_row`]}`}>
+                  <Col xl={12} md={12} style={{ justifyContent: "center" }}
+                    className={`${styles[`${shop}_detailed_view_inventory_form_label`]}`}>
                     ON-HAND INVENTORY
                   </Col>
                 </Row>
-                <Row
-                  className={`${
-                    styles[`${shop}_detailed_view_inventory_form_row`]
-                  }`}
-                >
-                  <Col
-                    xl={2}
-                    md={6}
-                    className={`${
-                      styles[`${shop}_detailed_view_inventory_form_label`]
-                    }`}
-                  >
+                <Row className={`${styles[`${shop}_detailed_view_inventory_form_row`]}`}>
+                  <Col xl={2} md={6} className={`${styles[`${shop}_detailed_view_inventory_form_label`]}`}>
                     CASE
                   </Col>
-                  <Col
-                    xl={2}
-                    md={6}
-                    className={`${
-                      styles[`${shop}_detailed_view_inventory_form_input_col`]
-                    }`}
-                  >
-                    <Form.Control
-                      //name={"CASE"}
-                      placeholder={selectedData ? selectedData.case_ : ""}
-                      value={case_}
-                      className={`${
-                        styles[`${shop}_detailed_view_inventory_form_input`]
-                      }`}
+                  <Col xl={2} md={6} className={`${styles[`${shop}_detailed_view_inventory_form_input_col`]}`}>
+                    <Form.Control placeholder={selectedData ? selectedData.case_ : ""} value={case_}
+                      className={`${styles[`${shop}_detailed_view_inventory_form_input`]}`}
                       pattern="^[0-9\.]*$"
                       onChange={(e) => {
                         if (!e.target.validity.patternMismatch) {
                           dispatch(setCase_(e.target.value));
-                        }
-                      }}
+                        }}}
                     ></Form.Control>
                   </Col>
-                  <Col
-                    xl={2}
-                    md={6}
-                    className={`${
-                      styles[`${shop}_detailed_view_inventory_form_label`]
-                    }`}
-                  >
+                  <Col xl={2} md={6} className={`${styles[`${shop}_detailed_view_inventory_form_label`]}`}>
                     LBS
                   </Col>
-                  <Col
-                    xl={2}
-                    md={6}
-                    className={`${
-                      styles[`${shop}_detailed_view_inventory_form_input_col`]
-                    }`}
-                  >
-                    <Form.Control
-                      name={"LBS"}
-                      disabled={
-                        unlock
-                          ? unlock[0] == "N/A"
-                            ? false
-                            : unlock.find((element) => element == "LB")
-                            ? false
-                            : true
-                          : false
-                      }
-                      placeholder={selectedData ? selectedData.lb : ""}
-                      value={lbs}
-                      className={`${
-                        styles[`${shop}_detailed_view_inventory_form_input`]
-                      }`}
-                      pattern="^[0-9\.]*$"
+                  <Col xl={2} md={6} className={`${styles[`${shop}_detailed_view_inventory_form_input_col`]}`}>
+                    <Form.Control name={"LBS"} placeholder={selectedData ? selectedData.lb : ""} value={lbs}
+                      disabled={disable(unlock,"LBS")}
+                      className={`${ styles[`${shop}_detailed_view_inventory_form_input`]}`} pattern="^[0-9\.]*$"
                       onChange={(e) => {
                         if (!e.target.validity.patternMismatch) {
                           dispatch(setLbs(e.target.value));
-                        }
-                      }}
+                        }}}
                     ></Form.Control>
                   </Col>
-                  <Col
-                    xl={2}
-                    md={6}
-                    className={`${
-                      styles[`${shop}_detailed_view_inventory_form_label`]
-                    }`}
-                  >
+                  <Col xl={2} md={6} className={`${styles[`${shop}_detailed_view_inventory_form_label`]}`}>
                     BAG
                   </Col>
-                  <Col
-                    xl={2}
-                    md={6}
-                    className={`${
-                      styles[`${shop}_detailed_view_inventory_form_input_col`]
-                    }`}
-                  >
-                    <Form.Control
-                      name={"BAG"}
-                      placeholder={selectedData ? selectedData.bag : ""}
-                      value={bag}
-                      className={`${
-                        styles[`${shop}_detailed_view_inventory_form_input`]
-                      }`}
-                      pattern="^[0-9\.]*$"
-                      disabled={
-                        unlock
-                          ? unlock[0] == "N/A"
-                            ? false
-                            : unlock.find((element) => element == "BAG")
-                            ? false
-                            : true
-                          : false
-                      }
+                  <Col xl={2} md={6} className={`${styles[`${shop}_detailed_view_inventory_form_input_col`]}`}>
+                    <Form.Control name={"BAGS"} placeholder={selectedData ? selectedData.bag : ""} value={bag}
+                      className={`${styles[`${shop}_detailed_view_inventory_form_input`]}`} pattern="^[0-9\.]*$"
+                      disabled={ disable(unlock,"BAGS")}
                       onChange={(e) => {
                         if (!e.target.validity.patternMismatch) {
                           dispatch(setBag(e.target.value));
-                        }
-                      }}
+                        }}}
                     ></Form.Control>
                   </Col>
                 </Row>
-                <Row
-                  className={`${
-                    styles[`${shop}_detailed_view_inventory_form_row`]
-                  }`}
-                >
-                  <Col
-                    xl={2}
-                    md={6}
-                    className={`${
-                      styles[`${shop}_detailed_view_inventory_form_label`]
-                    }`}
-                  >
+                <Row className={`${styles[`${shop}_detailed_view_inventory_form_row`]}`}>
+                  <Col xl={2} md={6} className={`${styles[`${shop}_detailed_view_inventory_form_label`]}`}>
                     TRAY
                   </Col>
-                  <Col
-                    xl={2}
-                    md={6}
-                    className={`${
-                      styles[`${shop}_detailed_view_inventory_form_input_col`]
-                    }`}
-                  >
-                    <Form.Control
-                      name={"TRAY"}
-                      placeholder={selectedData ? selectedData.tray : ""}
-                      value={tray}
-                      disabled={
-                        unlock
-                          ? unlock[0] == "N/A"
-                            ? false
-                            : unlock.find((element) => element == "TRAY")
-                            ? false
-                            : true
-                          : false
-                      }
-                      className={`${
-                        styles[`${shop}_detailed_view_inventory_form_input`]
-                      }`}
-                      pattern="^[0-9\.]*$"
+                  <Col xl={2} md={6} className={`${styles[`${shop}_detailed_view_inventory_form_input_col`]}`}>
+                    <Form.Control name={"TRAY"} placeholder={selectedData ? selectedData.tray : ""} value={tray}
+                      disabled={disable(unlock,"TRAY")}
+                      className={`${ styles[`${shop}_detailed_view_inventory_form_input`] }`} pattern="^[0-9\.]*$"
                       onChange={(e) => {
                         if (!e.target.validity.patternMismatch) {
                           dispatch(setTray(e.target.value));
-                        }
-                      }}
+                        }}}
                     ></Form.Control>
                   </Col>
-                  <Col
-                    xl={2}
-                    md={6}
-                    className={`${
-                      styles[`${shop}_detailed_view_inventory_form_label`]
-                    }`}
-                  >
+                  <Col xl={2} md={6} className={`${styles[`${shop}_detailed_view_inventory_form_label`]}`}>
                     EA
                   </Col>
-                  <Col
-                    xl={2}
-                    md={6}
-                    className={`${
-                      styles[`${shop}_detailed_view_inventory_form_input_col`]
-                    }`}
-                  >
-                    <Form.Control
-                      name={"EA"}
-                      placeholder={selectedData ? selectedData.ea : ""}
-                      disabled={
-                        unlock
-                          ? unlock[0] == "N/A"
-                            ? false
-                            : unlock.find((element) => element == "EA")
-                            ? false
-                            : true
-                          : false
-                      }
-                      value={ea}
-                      className={`${
-                        styles[`${shop}_detailed_view_inventory_form_input`]
-                      }`}
-                      pattern="^[0-9\.]*$"
+                  <Col xl={2} md={6} className={`${styles[`${shop}_detailed_view_inventory_form_input_col`]}`}>
+                    <Form.Control name={"EA"} placeholder={selectedData ? selectedData.ea : ""}
+                      disabled={disable(unlock,"EA")}
+                      value={ea} className={`${ styles[`${shop}_detailed_view_inventory_form_input`]}`} pattern="^[0-9\.]*$"
                       onChange={(e) => {
                         if (!e.target.validity.patternMismatch) {
                           dispatch(setEa(e.target.value));
-                        }
-                      }}
+                        }}}
                     ></Form.Control>
                   </Col>
-                  <Col
-                    xl={2}
-                    md={6}
-                    className={`${
-                      styles[`${shop}_detailed_view_inventory_form_label`]
-                    }`}
-                  >
+                  <Col xl={2} md={6} className={`${styles[`${shop}_detailed_view_inventory_form_label`]}`}>
                     OZ
                   </Col>
-                  <Col
-                    xl={2}
-                    md={6}
-                    className={`${
-                      styles[`${shop}_detailed_view_inventory_form_input_col`]
-                    }`}
-                  >
-                    <Form.Control
-                      name={"OZ"}
-                      disabled={
-                        unlock
-                          ? unlock[0] == "N/A"
-                            ? false
-                            : unlock.find((element) => element == "OZ")
-                            ? false
-                            : true
-                          : false
-                      }
-                      placeholder={selectedData ? selectedData.oz : ""}
-                      value={oz}
-                      className={`${
-                        styles[`${shop}_detailed_view_inventory_form_input`]
-                      }`}
-                      pattern="^[0-9\.]*$"
+                  <Col xl={2} md={6} className={`${styles[`${shop}_detailed_view_inventory_form_input_col`]}`}>
+                    <Form.Control name={"OZ"} placeholder={selectedData ? selectedData.oz : ""} value={oz}
+                      disabled={disable(unlock,"OZ")}
+                      className={`${styles[`${shop}_detailed_view_inventory_form_input`]}`}pattern="^[0-9\.]*$"
                       onChange={(e) => {
                         if (!e.target.validity.patternMismatch) {
                           dispatch(setOz(e.target.value));
-                        }
-                      }}
+                        }}}
                     ></Form.Control>
                   </Col>
                 </Row>
-                <Row
-                  className={`${
-                    styles[`${shop}_detailed_view_inventory_form_row`]
-                  }`}
-                >
-                  <Col
-                    xl={2}
-                    md={6}
-                    className={`${
-                      styles[`${shop}_detailed_view_inventory_form_label`]
-                    }`}
-                  >
+                <Row className={`${styles[`${shop}_detailed_view_inventory_form_row`]}`}>
+                  <Col xl={2} md={6} className={`${styles[`${shop}_detailed_view_inventory_form_label`]}`}>
                     GAL
                   </Col>
-                  <Col
-                    xl={4}
-                    md={6}
-                    className={`${
-                      styles[`${shop}_detailed_view_inventory_form_input_col`]
-                    }`}
-                  >
-                    <Form.Control
-                      name={"GAL"}
-                      disabled={
-                        unlock
-                          ? unlock[0] == "N/A"
-                            ? false
-                            : unlock.find((element) => element == "GAL")
-                            ? false
-                            : true
-                          : false
-                      }
-                      placeholder={selectedData ? selectedData.gal : ""}
-                      value={gal}
-                      className={`${
-                        styles[`${shop}_detailed_view_inventory_form_input`]
-                      }`}
-                      pattern="^[0-9\.]*$"
+                  <Col xl={4} md={6} className={`${styles[`${shop}_detailed_view_inventory_form_input_col`]}`}>
+                    <Form.Control name={"GAL"} placeholder={selectedData ? selectedData.gal : ""} value={gal}
+                      disabled={disable(unlock,"GAL")}
+                      className={`${styles[`${shop}_detailed_view_inventory_form_input`]}`} pattern="^[0-9\.]*$"
                       onChange={(e) => {
                         if (!e.target.validity.patternMismatch) {
                           dispatch(setGal(e.target.value));
-                        }
-                      }}
+                        }}}
                     ></Form.Control>
                   </Col>
-                  <Col
-                    xl={2}
-                    md={6}
-                    className={`${
-                      styles[`${shop}_detailed_view_inventory_form_label`]
-                    }`}
-                  >
+                  <Col xl={2} md={6} className={`${styles[`${shop}_detailed_view_inventory_form_label`]}`}>
                     SLEEVES
                   </Col>
-                  <Col
-                    xl={4}
-                    md={6}
-                    className={`${
-                      styles[`${shop}_detailed_view_inventory_form_input_col`]
-                    }`}
-                  >
-                    <Form.Control
-                      name={"SLEEVES"}
-                      placeholder={selectedData ? selectedData.sleeves : ""}
-                      value={sleeves}
-                      className={`${
-                        styles[`${shop}_detailed_view_inventory_form_input`]
-                      }`}
+                  <Col xl={4} md={6} className={`${styles[`${shop}_detailed_view_inventory_form_input_col`]}`}>
+                    <Form.Control name={"SLEEVES"} placeholder={selectedData ? selectedData.sleeves : ""}
+                      value={sleeves} className={`${styles[`${shop}_detailed_view_inventory_form_input`]}`}
                       pattern="^[0-9\.]*$"
-                      disabled={
-                        unlock
-                          ? unlock[0] == "N/A"
-                            ? false
-                            : unlock.find((element) => element == "SLEEVE")
-                            ? false
-                            : true
-                          : false
-                      }
+                      disabled={disable(unlock,"SLEEVE")}
                       onChange={(e) => {
                         if (!e.target.validity.patternMismatch) {
                           dispatch(setSleeves(e.target.value));
-                        }
-                      }}
+                        }}}
                     ></Form.Control>
                   </Col>
                 </Row>
-                <Row
-                  className={`${
-                    styles[`${shop}_detailed_view_inventory_form_row`]
-                  }`}
-                >
-                  {/*<Col
-                    xl={6}
-                    md={6}
-                    className={`${
-                      styles[`${shop}_detailed_view_inventory_form_label`]
-                    }`}
-                  >
-                    CALCULATED ON-HAND CASES
-                  </Col>
-                  <Col
-                    xl={6}
-                    md={6}
-                    className={`${
-                      styles[`${shop}_detailed_view_inventory_form_input_col`]
-                    }`}
-                  >
-                    <Form.Control
-                      name={"TOTAL_CASES"}
-                      placeholder={"Calculated Total Cases"}
-                      value={totalCases ? totalCases : selectedData.total_case}
-                      className={`${
-                        styles[`${shop}_detailed_view_inventory_form_input`]
-                      }`}
-                      disabled
-                    ></Form.Control>
-                    </Col>*/}
+                <Row className={`${styles[`${shop}_detailed_view_inventory_form_row`]}`}>
                 </Row>
-                {/* UNDER DEVELOPMENT!!!!!
-                <Row
-                  className={`${
-                    styles[`${shop}_detailed_view_inventory_form_row`]
-                  }`}
-                >
-                  <Col
-                    xl={6}
-                    md={6}
-                    className={`${
-                      styles[`${shop}_detailed_view_inventory_form_label`]
-                    }`}
-                  >
-                    CALCULATED ON-HAND EA
-                  </Col>
-                  <Col
-                    xl={6}
-                    md={6}
-                    className={`${
-                      styles[`${shop}_detailed_view_inventory_form_input_col`]
-                    }`}
-                  >
-                    <Form.Control
-                      name={"TOTAL_CASES"}
-                      placeholder={"Calculated Total Cases"}
-                      value={totalCases ? totalCases : selectedData.total_case}
-                      className={`${
-                        styles[`${shop}_detailed_view_inventory_form_input`]
-                      }`}
-                      disabled
-                    ></Form.Control>
-                  </Col>
-                </Row> */}
               </Col>
             </Row>
-            <Row
-              className={`${
-                styles[`${shop}_detailed_view_inventory_form_row`]
-              }`}
-            >
-              <div
-                className={`${
-                  styles[`${shop}_detailed_view_inventory_form_horizontal_line`]
-                }`}
-              ></div>
+            <Row className={`${styles[`${shop}_detailed_view_inventory_form_row`]}`}>
+              <div className={`${styles[`${shop}_detailed_view_inventory_form_horizontal_line`]}`}></div>
             </Row>
-            <Row 
-            className={`${
-              styles[`${shop}_detailed_view_inventory_form_row`]
-            }`}>
-                <Col 
-                  xl={12}
-                  md={12}
-                  style={{justifyContent:"center"}}
-                  className={`${
-                    styles[`${shop}_detailed_view_inventory_form_label`]
-                  }`}
-                  >
+            <Row className={`${styles[`${shop}_detailed_view_inventory_form_row`]}`}>
+                <Col xl={12} md={12} style={{justifyContent:"center"}}
+                  className={`${styles[`${shop}_detailed_view_inventory_form_label`]}`}>
                     TOTAL CALCULATED ON-HAND
-                  </Col>
+                </Col>
             </Row>
             <Row className={`${styles[`${shop}_detailed_view_inventory_form_row`]}`}>
                 <Col xl={1} xxl={1} lg={2} md={2}>
@@ -1313,8 +690,8 @@ function InventoryForm() {
                         CASES
                     </Col>
                     <Col xs={12} className={`${styles[`${shop}_detailed_view_inventory_form_input_col`]}`}>
-                      <Form.Control name={"TOTAL_CASES"} placeholder={"Calculated Total Cases"} value={totalCases ? totalCases.toFixed(1) : selectedData.totalcase.toFixed(1)} 
-                        className={`${styles[`${shop}_detailed_view_inventory_form_input`]}`}>
+                      <Form.Control name={"TOTAL_CASES"} placeholder={"Calculated Total Cases"} value={totalCases ? totalCases.toFixed(2) : selectedData.totalcase.toFixed(2)} 
+                        className={`${styles[`${shop}_detailed_view_inventory_form_input`]}`} disabled>
                       </Form.Control>
                     </Col>
                   </Row>
@@ -1325,8 +702,8 @@ function InventoryForm() {
                       BAGS
                     </Col>
                     <Col xs={12} className={`${styles[`${shop}_detailed_view_inventory_form_input_col`]}`}>
-                      <Form.Control name={"TOTAL_Bags"} placeholder={"Calculated Total Bags"} value={totalBags ? totalBags.toFixed(1) : selectedData.totalbags.toFixed(1)}
-                        className={`${styles[`${shop}_detailed_view_inventory_form_input`]}`}>
+                      <Form.Control name={"TOTAL_Bags"} placeholder={"Calculated Total Bags"} value={totalBags ? totalBags.toFixed(2) : selectedData.totalbags.toFixed(2)}
+                        className={`${styles[`${shop}_detailed_view_inventory_form_input`]}`} disabled>
                       </Form.Control>
                     </Col>
                   </Row>
@@ -1337,8 +714,8 @@ function InventoryForm() {
                       EACH
                     </Col>
                     <Col xs={12} className={`${styles[`${shop}_detailed_view_inventory_form_input_col`]}`}>
-                      <Form.Control name={"EACH"} className={`${styles[`${shop}_detailed_view_inventory_form_input`]}`} style={{borderRadius:"5px"}}
-                        placeholder={selectedData ? selectedData.totaleach : ""}>
+                      <Form.Control name={"EACH"} className={`${styles[`${shop}_detailed_view_inventory_form_input`]}`} style={{borderRadius:"5px"}} disabled
+                        placeholder={selectedData ? selectedData.totaleach : ""} value={totalEach ? totalEach.toFixed(1) : selectedData.totaleach.toFixed(1)}>
                       </Form.Control>
                     </Col>
                   </Row>
@@ -1349,8 +726,8 @@ function InventoryForm() {
                       TRAY
                     </Col>
                     <Col xs={12} className={`${styles[`${shop}_detailed_view_inventory_form_input_col`]}`}>
-                      <Form.Control name={"TRAY"} className={`${ styles[`${shop}_detailed_view_inventory_form_input`]}`} style={{borderRadius:"5px"}}
-                        placeholder={selectedData ? selectedData.totaltray : ""}>
+                      <Form.Control name={"TRAY"} className={`${ styles[`${shop}_detailed_view_inventory_form_input`]}`} style={{borderRadius:"5px"}} disabled
+                        placeholder={selectedData ? selectedData.totaltray : ""} value={totalTray ? totalTray.toFixed(1) : selectedData.totaltray.toFixed(1)}>
                       </Form.Control>
                     </Col>
                   </Row>
@@ -1361,8 +738,8 @@ function InventoryForm() {
                       SLEEVES
                     </Col>
                     <Col xs={12} className={`${styles[`${shop}_detailed_view_inventory_form_input_col`]}`}>
-                      <Form.Control name={"SLEEVES"} className={`${styles[`${shop}_detailed_view_inventory_form_input`]}`} style={{borderRadius:"5px"}}
-                        placeholder={selectedData ? selectedData.totalsleeves : ""}>
+                      <Form.Control name={"SLEEVES"} className={`${styles[`${shop}_detailed_view_inventory_form_input`]}`} style={{borderRadius:"5px"}} disabled
+                        placeholder={selectedData ? selectedData.totalsleeves : ""} value={totalSleeves ? totalSleeves.toFixed(1) : selectedData.totalsleeves.toFixed(1)}>
                       </Form.Control>
                     </Col>
                   </Row>
@@ -1374,8 +751,8 @@ function InventoryForm() {
                     </Col>
                     <Col xs={12} className={`${styles[`${shop}_detailed_view_inventory_form_input_col`]}`}>
                       <Form.Control name={"LBS"} className={`${styles[`${shop}_detailed_view_inventory_form_input`]}`}
-                        value={totalLBS ? totalLBS.toFixed(1) : selectedData.totallb.toFixed(1)} style={{borderRadius:"5px"}}
-                        placeholder={selectedData ? selectedData.totallb : ""}>
+                        value={totalLBS ? totalLBS.toFixed(2) : selectedData.totallb.toFixed(2)} style={{borderRadius:"5px"}} disabled
+                        placeholder={selectedData ? selectedData.totallb : ""} >
                       </Form.Control>
                     </Col>
                   </Row>
@@ -1387,7 +764,7 @@ function InventoryForm() {
                     </Col>
                     <Col xs={12} className={`${styles[`${shop}_detailed_view_inventory_form_input_col`]}`}>
                       <Form.Control name={"OZ"} className={`${styles[`${shop}_detailed_view_inventory_form_input`]}`} style={{borderRadius:"5px"}}
-                        placeholder={selectedData ? selectedData.totaloz : ""} value={totalOZ ? totalOZ.toFixed(1) : selectedData.totaloz.toFixed(1)}>
+                        placeholder={selectedData ? selectedData.totaloz : ""} value={totalOZ ? totalOZ.toFixed(1) : selectedData.totaloz.toFixed(1)} disabled>
                       </Form.Control>
                     </Col>
                   </Row>
@@ -1398,8 +775,8 @@ function InventoryForm() {
                       LTR
                     </Col>
                     <Col xs={12} className={`${styles[`${shop}_detailed_view_inventory_form_input_col`]}`}>
-                      <Form.Control name={"LTR"} className={`${styles[`${shop}_detailed_view_inventory_form_input`]}`} style={{borderRadius:"5px"}}
-                        placeholder={selectedData ? selectedData.totalltr : ""}>
+                      <Form.Control name={"LTR"} className={`${styles[`${shop}_detailed_view_inventory_form_input`]}`} style={{borderRadius:"5px"}} disabled
+                        placeholder={selectedData ? selectedData.totalltr : ""} value={totalLiters ? totalLiters.toFixed(1) : selectedData.totalltr.toFixed(1)}>
                       </Form.Control>
                     </Col>
                   </Row>
@@ -1410,8 +787,8 @@ function InventoryForm() {
                       ML
                     </Col>
                     <Col xs={12} className={`${styles[`${shop}_detailed_view_inventory_form_input_col`]}`}>
-                      <Form.Control name={"ML"} className={`${styles[`${shop}_detailed_view_inventory_form_input`]}`} style={{borderRadius:"5px"}}
-                        placeholder={selectedData ? selectedData.totalml : ""}>
+                      <Form.Control name={"ML"} className={`${styles[`${shop}_detailed_view_inventory_form_input`]}`} style={{borderRadius:"5px"}} disabled
+                        placeholder={selectedData ? selectedData.totalml : ""} value={totalML ? totalML.toFixed(1) : selectedData.totalml.toFixed(1)}>
                       </Form.Control>
                     </Col>
                   </Row>
@@ -1422,8 +799,8 @@ function InventoryForm() {
                       GAL
                     </Col>
                     <Col xs={12} className={`${styles[`${shop}_detailed_view_inventory_form_input_col`]}`}>
-                      <Form.Control name={"GAL"} className={`${styles[`${shop}_detailed_view_inventory_form_input`]}`} style={{borderRadius:"5px"}}
-                        placeholder={selectedData ? selectedData.totalgal : ""}>
+                      <Form.Control name={"GAL"} className={`${styles[`${shop}_detailed_view_inventory_form_input`]}`} style={{borderRadius:"5px"}} disabled
+                        placeholder={selectedData ? selectedData.totalgal : ""} value={totalGAL ? totalGAL.toFixed(1) : selectedData.totalgal.toFixed(1)}>
                       </Form.Control>
                     </Col>
                   </Row>
@@ -1434,211 +811,85 @@ function InventoryForm() {
                       GM
                     </Col>
                     <Col xs={12} className={`${styles[`${shop}_detailed_view_inventory_form_input_col`]}`}>
-                      <Form.Control name={"GM"} className={`${styles[`${shop}_detailed_view_inventory_form_input`]}`} style={{borderRadius:"5px"}}
-                        placeholder={selectedData ? selectedData.totalgm : ""}>
+                      <Form.Control name={"GM"} className={`${styles[`${shop}_detailed_view_inventory_form_input`]}`} style={{borderRadius:"5px"}} disabled
+                        placeholder={selectedData ? selectedData.totalgm : ""} value={totalGM ? totalGM.toFixed(1) : selectedData.totalgm.toFixed(1)}>
                       </Form.Control>
                     </Col>
                   </Row>
                 </Col>
             </Row>
-            <Row
-              className={`${
-                styles[`${shop}_detailed_view_inventory_form_row`]
-              }`}
-            >
-              <div
-                className={`${
-                  styles[`${shop}_detailed_view_inventory_form_horizontal_line`]
-                }`}
-              ></div>
+            <Row className={`${styles[`${shop}_detailed_view_inventory_form_row`]}`}>
+              <div className={`${styles[`${shop}_detailed_view_inventory_form_horizontal_line`]}`}></div>
             </Row>
-            <Row
-              className={`${
-                styles[`${shop}_detailed_view_inventory_form_row`]
-              }`}
-            >
-              <Col
-                xl={6}
-                md={6}
-                className={`${
-                  styles[`${shop}_detailed_view_inventory_form_label`]
-                }`}
-              >
+            <Row className={`${styles[`${shop}_detailed_view_inventory_form_row`]}`}>
+              <Col xl={6} md={6} className={`${styles[`${shop}_detailed_view_inventory_form_label`]}`}>
                 ORDER
               </Col>
-              <Col
-                xl={6}
-                md={6}
-                className={`${
-                  styles[`${shop}_detailed_view_inventory_form_input_col`]
-                }`}
-              >
-                <Form.Control
-                  name={"ORDER"}
-                  value={order_}
-                  className={`${
-                    styles[`${shop}_detailed_view_inventory_form_input`]
-                  }`}
-                  disabled
+              <Col xl={6} md={6} className={`${styles[`${shop}_detailed_view_inventory_form_input_col`]}`}>
+                <Form.Control name={"ORDER"} value={order_} disabled 
+                className={`${styles[`${shop}_detailed_view_inventory_form_input`]}`}
                 ></Form.Control>
               </Col>
             </Row>
-            <Row
-              className={`${
-                styles[`${shop}_detailed_view_inventory_form_row`]
-              }`}
-            >
-              <Col
-                xl={6}
-                md={6}
-                className={`${
-                  styles[`${shop}_detailed_view_inventory_form_label`]
-                }`}
-              >
+            <Row className={`${styles[`${shop}_detailed_view_inventory_form_row`]}`}>
+              <Col xl={6} md={6} className={`${styles[`${shop}_detailed_view_inventory_form_label`]}`}>
                 ADJUSTED ORDER
               </Col>
-              <Col
-                xl={6}
-                md={6}
-                className={`${
-                  styles[`${shop}_detailed_view_inventory_form_input_col`]
-                }`}
-              >
-                <Form.Control
-                  name={"ADJUSTED_ORDER"}
-                  value={adjusted_order_}
-                  className={`${
-                    styles[`${shop}_detailed_view_inventory_form_input`]
-                  }`}
-                  disabled
+              <Col xl={6} md={6} className={`${styles[`${shop}_detailed_view_inventory_form_input_col`]}`}>
+                <Form.Control name={"ADJUSTED_ORDER"} value={adjusted_order_} disabled
+                  className={`${styles[`${shop}_detailed_view_inventory_form_input`]}`}
                 ></Form.Control>
               </Col>
             </Row>
             <Row style={{ paddingTop: 1.75 }}>
-              <div
-                className={`${
-                  styles[`${shop}_detailed_view_inventory_form_horizontal_line`]
-                }`}
-              ></div>
+              <div className={`${styles[`${shop}_detailed_view_inventory_form_horizontal_line`]}`}></div>
             </Row>
-            <Row
-              style={{ paddingTop: 1.75 }}
-              className={`${styles[`${shop}_big_screen_view`]}`}
-            >
-              <Col
-                xl={3}
-                md={6}
-                className={`${
-                  styles[`${shop}_detailed_view_inventory_form_label`]
-                }`}
-              >
+            <Row style={{ paddingTop: 1.75 }} className={`${styles[`${shop}_big_screen_view`]}`}>
+              <Col xl={3} md={6} className={`${styles[`${shop}_detailed_view_inventory_form_label`]}`}>
                 SALES
               </Col>
-              <Col
-                xl={3}
-                md={6}
-                className={`${
-                  styles[`${shop}_detailed_view_inventory_form_input_col`]
-                }`}
-              >
-                <Form.Control
-                  name={"SALES"}
-                  pattern="^[0-9]*$"
+              <Col xl={3} md={6} className={`${styles[`${shop}_detailed_view_inventory_form_input_col`]}`}>
+                <Form.Control name={"SALES"} pattern="^[0-9]*$"
                   onChange={(e) => {
                     if (!e.target.validity.patternMismatch) {
                       dispatch(setSales(e.target.value));
-                    }
-                  }}
-                  placeholder={selectedData ? selectedData.sales : ""}
-                  value={sales}
-                  className={`${
-                    styles[`${shop}_detailed_view_inventory_form_input`]
-                  }`}
+                    }}}
+                  placeholder={selectedData ? selectedData.sales : ""} value={sales}
+                  className={`${styles[`${shop}_detailed_view_inventory_form_input`]}`}
                 ></Form.Control>
               </Col>
-              <Col
-                xl={3}
-                md={6}
-                className={`${
-                  styles[`${shop}_detailed_view_inventory_form_label`]
-                }`}
-              >
+              <Col xl={3} md={6} className={`${styles[`${shop}_detailed_view_inventory_form_label`]}`}>
                 ADJUSTED SALES
               </Col>
-              <Col
-                xl={3}
-                md={6}
-                className={`${
-                  styles[`${shop}_detailed_view_inventory_form_input_col`]
-                }`}
-              >
-                <Form.Control
-                  name={"ADJUSTED_SALES"}
-                  placeholder={"Calculated Adjusted Sales"}
-                  className={`${
-                    styles[`${shop}_detailed_view_inventory_form_input`]
-                  }`}
-                  disabled
+              <Col xl={3} md={6} className={`${styles[`${shop}_detailed_view_inventory_form_input_col`]}`}>
+                <Form.Control name={"ADJUSTED_SALES"} placeholder={"Calculated Adjusted Sales"}
+                  className={`${styles[`${shop}_detailed_view_inventory_form_input`]}`} disabled
                 ></Form.Control>
               </Col>
             </Row>
-            <Row
-              style={{ paddingTop: 1.75 }}
-              className={`${styles[`${shop}_big_screen_view`]}`}
-            >
-              <Col
-                xl={3}
-                md={6}
-                className={`${
-                  styles[`${shop}_detailed_view_inventory_form_label`]
-                }`}
-              >
+            <Row style={{ paddingTop: 1.75 }} className={`${styles[`${shop}_big_screen_view`]}`}>
+              <Col xl={3} md={6} className={`${styles[`${shop}_detailed_view_inventory_form_label`]}`}>
                 YIELD
               </Col>
-              <Col
-                xl={9}
-                md={6}
-                className={`${
-                  styles[`${shop}_detailed_view_inventory_form_input_col`]
-                }`}
-              >
-                <Form.Control
-                  name={"YIELD"}
-                  pattern="^[0-9]*$"
+              <Col xl={9} md={6} className={`${styles[`${shop}_detailed_view_inventory_form_input_col`]}`}>
+                <Form.Control name={"YIELD"} pattern="^[0-9]*$"
                   onChange={(e) => {
                     if (!e.target.validity.patternMismatch) {
                       dispatch(setYield(e.target.value));
-                    }
-                  }}
-                  placeholder={selectedData ? selectedData.yeild : ""}
-                  value={yield_}
-                  className={`${
-                    styles[`${shop}_detailed_view_inventory_form_input`]
-                  }`}
+                    }}}
+                  placeholder={selectedData ? selectedData.yeild : ""} value={yield_}
+                  className={`${styles[`${shop}_detailed_view_inventory_form_input`]}`}
                 ></Form.Control>
               </Col>
             </Row>
 
             <Row style={{ paddingTop: 1.75 }}>
-              <div
-                className={`${
-                  styles[`${shop}_detailed_view_inventory_form_horizontal_line`]
-                }`}
-              ></div>
+              <div className={`${styles[`${shop}_detailed_view_inventory_form_horizontal_line`]}`}></div>
             </Row>
             <Row style={{ paddingTop: 0, paddingBottom: 10 }}>
-              <Col
-                className={`${
-                  styles[`${shop}_detailed_view_inventory_form_input_btn_col`]
-                } ${styles[`${shop}_detailed_view_inventory_form_input_col`]}`}
-                xs={{ span: 4, offset: 4 }}
-              >
-                <Button
-                  bsPrefix={`${
-                    styles[`${shop}_detailed_view_inventory_form_update_button`]
-                  }`}
-                  type="submit"
-                >
+              <Col className={`${styles[`${shop}_detailed_view_inventory_form_input_btn_col`]} ${styles[`${shop}_detailed_view_inventory_form_input_col`]}`}
+                xs={{ span: 4, offset: 4 }}>
+                <Button bsPrefix={`${styles[`${shop}_detailed_view_inventory_form_update_button`]}`} type="submit">
                   Update Data
                 </Button>
               </Col>

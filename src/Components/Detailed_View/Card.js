@@ -19,6 +19,7 @@ function InventoryCard(props) {
   };
 
   const tryRequire = () => {
+    console.log(props)
     try {
       return require(`./../images/${props.data.location_}/${props.data.vendor_id}.jpg`);
     } catch (err) {
@@ -127,6 +128,21 @@ function InventoryCard(props) {
               <Col>FoodPro ID - {props.data.foodpro_id == null
                   ? "No Data"
                   : props.data.foodpro_id}</Col>
+            </Row>
+            <Row
+              className={`${styles[`${shop}_detailed_view_card_content`]} ${
+                styles[`${shop}_detailed_view_card_content_body`]
+              } ${
+                selectedData
+                  ? selectedData.vendor_id == props.data.vendor_id
+                    ? styles[`${shop}_detailed_view_card_content_body_active`]
+                    : ""
+                  : ""
+              }`}
+            >
+              <Col>Sygma ID - {props.data.sygma_id == null
+                  ? "No Data"
+                  : props.data.sygma_id}</Col>
             </Row>
           </Col>
         </Row>

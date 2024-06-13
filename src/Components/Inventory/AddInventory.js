@@ -28,15 +28,17 @@ function AddInventory() {
     const [ea,setEA] = useState(null)
     const [oz,setOZ] = useState(null)
     const [gal,setGAL] = useState(null)
+    const [grams,setGrams] = useState(null)
     const [sleeves,setSleeves] = useState(null)
     const [validate,setValidation] = useState(false)
     const [showModal,setShowModal] = useState(false)
     const [modalMessage,setModalMessage] = useState(null)
     const [unlock,setUnlock] = useState(null)
-    const [oztolbs,setOzToLBS] = useState(null)
-    const [mltooz,setMlToOz] = useState(null)
-    const [lttooz, setLTtoOZ] = useState(null)
-    const [mltol, setMlToL] = useState(null)
+    const [category,setCategory] = useState(null)
+    const [subCategory,setSubCategory] = useState(null)
+    const [sygmaId,setSygmaId] = useState(null)
+    const [sygmaStatus,setSygmaStatus] = useState(null)
+    const [ibohStatus,setIbohStatus] = useState(null)
     const userName = useSelector((state)=> state.dataReducer.userName)
     const url = "http://localhost:5000/addItem"
 
@@ -59,14 +61,14 @@ function AddInventory() {
            checkIsNegative(Case) || checkIsNegative(lbs) || checkIsNegative(bag) || 
            checkIsNegative(ea) || checkIsNegative(oz) || checkIsNegative(tray) || 
            checkIsNegative(sleeves) || checkIsNegative(gal) || checkIsEmpty(unlock) 
-           || checkIsNegative(oztolbs) || checkIsNegative(mltooz) || checkIsNegative(lttooz)
-           || checkIsNegative(mltol)) {
+           || checkIsEmpty(category) || checkIsEmpty(subCategory) || checkIsNegative(grams) || 
+            checkIsEmpty(sygmaId) || checkIsEmpty(sygmaStatus) || checkIsEmpty(ibohStatus)) {
             setValidation(false)
         }  else {
             setValidation(true)
         }
     },[inventoryId,foodProId,description,shopName,size,measurement,location
-        ,uom,pack,Case,lbs,bag,ea,oz,tray,sleeves,gal,unlock,oztolbs,mltooz,lttooz,mltol])
+        ,uom,pack,Case,lbs,bag,ea,oz,tray,sleeves,gal,unlock,category,subCategory,grams, sygmaId, sygmaStatus, ibohStatus])
 
     const insertDataIntoDB = async () => {
         const data = {
@@ -89,11 +91,14 @@ function AddInventory() {
             location:location,
             unlock:unlock,
             userName:userName,
-            ozToLBS:oztolbs,
-            mltooz:mltooz,
-            lttooz:lttooz,
-            mltol:mltol
+            category:category,
+            subCategory:subCategory,
+            grams:grams,
+            sygmaId: sygmaId,
+            sygmaStatus: sygmaStatus,
+            ibohStatus: ibohStatus
         }
+        console.log(data)
         try {
             const response = await fetch(url, {
                 method: "POST",
@@ -110,6 +115,7 @@ function AddInventory() {
                 setModalMessage(`Item ${description} successfully inserted into database with Vendor ID 
                 ${inventoryId} and FoodPro ID ${foodProId}`)
             }
+            console.log(data)
         } catch (err) {
             setModalMessage("Error Occurred while inserting data into Database")
         } finally {
@@ -176,14 +182,18 @@ function AddInventory() {
         document.getElementById("sleeves").classList.remove("is-valid")
         document.getElementById("unlock").classList.remove("is-invalid")  
         document.getElementById("unlock").classList.remove("is-valid")
-        document.getElementById("ozToLBS").classList.remove("is-valid")
-        document.getElementById("ozToLBS").classList.remove("is-invalid")
-        document.getElementById("mltooz").classList.remove("is-valid")
-        document.getElementById("mltooz").classList.remove("is-invalid")
-        document.getElementById("lttooz").classList.remove("is-valid")
-        document.getElementById("lttooz").classList.remove("is-invalid")
-        document.getElementById("mltoltr").classList.remove("is-valid")
-        document.getElementById("mltoltr").classList.remove("is-invalid")
+        document.getElementById("category").classList.remove("is-valid")
+        document.getElementById("category").classList.remove("is-invalid")
+        document.getElementById("subCategory").classList.remove("is-valid")
+        document.getElementById("subCategory").classList.remove("is-invalid")
+        document.getElementById("grams").classList.remove("is-valid")
+        document.getElementById("grams").classList.remove("is-invalid")
+        document.getElementById("sigmaId").classList.remove("is-invalid")
+        document.getElementById("sigmaId").classList.remove("is-valid")
+        document.getElementById("sigmaStatus").classList.remove("is-invalid")
+        document.getElementById("sigmaStatus").classList.remove("is-invalid")
+        document.getElementById("ibohStatus").classList.remove("is-invalid")
+        document.getElementById("ibohStatus").classList.remove("is-invalid")
     }
 
     const checkAllFields = () => {
@@ -332,33 +342,47 @@ function AddInventory() {
             document.getElementById("unlock").classList.remove("is-invalid")  
             document.getElementById("unlock").classList.add("is-valid")
         } 
-        if(checkIsNegative(oztolbs)) {
-            document.getElementById("ozToLBS").classList.add("is-invalid")
-            document.getElementById("ozToLBS").classList.remove("is-valid")
+        if(checkIsEmpty(category)) {
+            document.getElementById("category").classList.add("is-invalid")
+            document.getElementById("category").classList.remove("is-valid")
         } else {
-            document.getElementById("ozToLBS").classList.add("is-valid")
-            document.getElementById("ozToLBS").classList.remove("is-invalid")
+            document.getElementById("category").classList.add("is-valid")
+            document.getElementById("category").classList.remove("is-invalid")
         }
-        if(checkIsNegative(mltooz)) {
-            document.getElementById("mltooz").classList.add("is-invalid")
-            document.getElementById("mltooz").classList.remove("is-valid")
+        if(checkIsEmpty(subCategory)) {
+            document.getElementById("subCategory").classList.add("is-invalid")
+            document.getElementById("subCategory").classList.remove("is-valid")
         } else {
-            document.getElementById("mltooz").classList.add("is-valid")
-            document.getElementById("mltooz").classList.remove("is-invalid")
+            document.getElementById("subCategory").classList.add("is-valid")
+            document.getElementById("subCategory").classList.remove("is-invalid")
         }
-        if(checkIsNegative(lttooz)) {
-            document.getElementById("lttooz").classList.add("is-invalid")
-            document.getElementById("lttooz").classList.remove("is-valid")
+        if(checkIsEmpty(grams)) {
+            document.getElementById("grams").classList.add("is-invalid")
+            document.getElementById("grams").classList.remove("is-valid")
         } else {
-            document.getElementById("lttooz").classList.add("is-valid")
-            document.getElementById("lttooz").classList.remove("is-invalid")
+            document.getElementById("grams").classList.add("is-valid")
+            document.getElementById("grams").classList.remove("is-invald")
         }
-        if(checkIsNegative(mltol)) {
-            document.getElementById("mltoltr").classList.remove("is-valid")
-            document.getElementById("mltoltr").classList.add("is-invalid")
+        if(checkIsEmpty(sygmaId)) {
+            document.getElementById("sigmaId").classList.add("is-invalid")
+            document.getElementById("sigmaId").classList.remove("is-valid")
         } else {
-            document.getElementById("mltoltr").classList.add("is-valid")
-            document.getElementById("mltoltr").classList.remove("is-invalid")
+            document.getElementById("sigmaId").classList.add("is-valid")
+            document.getElementById("sigmaId").classList.remove("is-invald")
+        }
+        if(checkIsEmpty(sygmaStatus)) {
+            document.getElementById("sigmaStatus").classList.add("is-invalid")
+            document.getElementById("sigmaStatus").classList.remove("is-valid")
+        } else {
+            document.getElementById("sigmaStatus").classList.add("is-valid")
+            document.getElementById("sigmaStatus").classList.remove("is-invald")
+        }
+        if(checkIsEmpty(ibohStatus)) {
+            document.getElementById("ibohStatus").classList.add("is-invalid")
+            document.getElementById("ibohStatus").classList.remove("is-valid")
+        } else {
+            document.getElementById("ibohStatus").classList.add("is-valid")
+            document.getElementById("ibohStatus").classList.remove("is-invald")
         }
     }
 
@@ -384,11 +408,33 @@ function AddInventory() {
        setValidation(false)
        setModalMessage(null)
        setUnlock(null)
-       setOzToLBS(null)
-       setMlToOz(null)
-       setLTtoOZ(null)
-       setMlToL(null)
+       setCategory(null)
+       setSubCategory(null)
+       setGrams(null)
+       setSygmaId(null)
+       setSygmaStatus(null)
+       setIbohStatus(null)
        removeClasses()
+    }
+
+    const handleSigmaId = (e) => {
+        setSygmaId(e.target.value)
+    }
+
+    const handleSigmaStatus = (e) => {
+        setSygmaStatus(e.target.value)
+    }
+
+    const handleIbohStatus = (e) => {
+        setIbohStatus(e.target.value)
+    }
+
+    const handleCategory = (e) => {
+        setCategory(e.target.value)
+    }
+
+    const handleSubCategory = (e) => {
+        setSubCategory(e.target.value)
     }
 
     const handleInventoryID = (e) => {
@@ -463,25 +509,43 @@ function AddInventory() {
         setUnlock(e.target.value)
     }
 
-    const handleOzToLBS = (e) => {
-        setOzToLBS(e.target.value)
-    }
-
-    const handleMlToOz = (e) => {
-        setMlToOz(e.target.value)
-    }
-
-    const handleLTtoOZ = (e) => {
-        setLTtoOZ(e.target.value)
-    }
-
     const hideModal = () => {
         setShowModal(false)
     }
 
-    const handleMltoL = (e) => {
-        setMlToL(e.target.value)
+    const handleGrams = (e) => {
+        setGrams(e.target.value)
     }
+
+    const sigmaIdToolTip = (
+        <Tooltip id="sigmaId">
+            Enter Sigma Number
+        </Tooltip>
+    )
+
+    const sigmaStatusToolTip = (
+        <Tooltip id="sigmaStatus">
+            Enter Sigma Status
+        </Tooltip>
+    )
+
+    const iohStatusToolTip = (
+        <Tooltip id="ibohStatus">
+            Enter Iboh Status
+        </Tooltip>
+    )
+
+    const categoryToolTip = (
+        <Tooltip id="category">
+            Select Any Category
+        </Tooltip>
+    )
+
+    const subCategoryToolTip = (
+        <Tooltip id="subCategory">
+            Select any SubCategory
+        </Tooltip>
+    )
 
     const inventoryToolTip = (
         <Tooltip id="inventory">
@@ -603,27 +667,12 @@ function AddInventory() {
         </Tooltip>
     )
 
-    const ozToLbsTooltip = (
-        <Tooltip id="ozToLBS">
-            Enter Oz to LBS value
+    const gramToolTip = (
+        <Tooltip id="gram">
+            Enter Grams
         </Tooltip>
     )
-    
-    const mlToOzToolTip = (
-        <Tooltip id="mltoOz">
-            Enter ML to OZ Value
-        </Tooltip>
-    )
-    const lttooztooltip = (
-        <Tooltip id="lttOz">
-            Enter LT To OZ value
-        </Tooltip>
-    )
-    const mlToLtrToolTip = (
-        <Tooltip id="mltoltr">
-            Enter ML To LTR value
-        </Tooltip>
-    )
+
     return(
         <React.Fragment>
             <Sidebar/>
@@ -826,6 +875,120 @@ function AddInventory() {
                             </Row>
                         </Col>
                     </Row>
+                    <Row className={styles[`field_rows`]}>
+                        <Col xs={12} sm={12} md={12} lg={6} xl={4} xxl={4}>
+                            <Row className={styles[`form_row`]}>
+                                <Col xs={12} sm={6}>
+                                    <FormLabel className={styles[`input_label`]}>Category</FormLabel>
+                                </Col>
+                                <Col xs={12} sm={6}>
+                                    <FormGroup className={styles[`input_row`]}>
+                                        <OverlayTrigger placement="bottom" overlay={categoryToolTip}>
+                                            <FormSelect className={styles[`input_row_value`]} required onChange={(e) => handleCategory(e)} id="category">
+                                                <option value="">Select Any Option</option>
+                                                <option value="BAKING">BAKING</option>
+                                            </FormSelect>
+                                        </OverlayTrigger>
+                                        {feedback ? <Feedback tooltip type="valid" className={styles[`input_tooltip_good`]}>Looks Good!</Feedback> : <></> }
+                                        {feedback ? <Feedback tooltip type="invalid" className={styles[`input_tooltip`]}>Enter Value</Feedback>: <></>}
+                                    </FormGroup>
+                                </Col>
+                            </Row>
+                        </Col>
+
+                        <Col xs={12} sm={12} md={12} lg={6} xl={4} xxl={4}>
+                            <Row className={styles[`form_row`]}>
+                                <Col xs={12} sm={6}>
+                                    <FormLabel className={styles[`input_label`]}>Sub Category</FormLabel>
+                                </Col>
+                                <Col xs={12} sm={6}>
+                                    <FormGroup className={styles[`input_row`]}>
+                                        <OverlayTrigger placement="bottom" overlay={subCategoryToolTip}>
+                                            <FormSelect className={styles[`input_row_value`]} required onChange={(e) => handleSubCategory(e)} id="subCategory">
+                                                <option value="">Select Any Option</option>
+                                                <option value="BAKING">BAKING</option>
+                                            </FormSelect>
+                                        </OverlayTrigger>
+                                        {feedback ? <Feedback tooltip type="valid" className={styles[`input_tooltip_good`]}>Looks Good!</Feedback> : <></> }
+                                        {feedback ? <Feedback tooltip type="invalid" className={styles[`input_tooltip`]}>Enter Value</Feedback>: <></>}
+                                    </FormGroup>
+                                </Col>
+                            </Row>
+                        </Col>
+
+                        <Col xs={12} sm={12} md={6} lg={6} xl={4} xxl={4}>
+                            <Row className={styles[`form_row`]}>
+                                <Col xs={12} sm={6} >
+                                    <FormLabel className={styles[`input_label`]}>Unlock</FormLabel>
+                                </Col>
+                                <Col xs={12} sm={6} >
+                                    <FormGroup className={styles[`input_row`]}>
+                                        <OverlayTrigger placement="bottom" overlay={unlockToolTip}>
+                                            <FormControl required type="input" placeholder="Enter Unlock" className={styles[`input_row_value`]}
+                                            onChange={(e)=>handleUnlock(e)} id="unlock"></FormControl>
+                                        </OverlayTrigger>
+                                        {feedback ? <Feedback tooltip type="valid" className={styles[`input_tooltip_good`]}>Looks Good!</Feedback> : <></> }
+                                        {feedback ? <Feedback tooltip type="invalid" className={styles[`input_tooltip`]}>Enter Value</Feedback>: <></>}
+                                    </FormGroup>
+                                </Col>
+                            </Row>
+                        </Col>
+                    </Row>
+                    <Row className={styles[`field_rows`]}>
+                        <Col xs={12} sm={12} md={12} lg={6} xl={4} xxl={4}>
+                            <Row className={styles[`form_row`]}>
+                                <Col xs={12} sm={6}>
+                                    <FormLabel className={styles[`input_label`]}>Sygma ID</FormLabel>
+                                </Col>
+                                <Col xs={12} sm={6}>
+                                    <FormGroup className={styles[`input_row`]}>
+                                        <OverlayTrigger placement="bottom" overlay={sigmaIdToolTip}>
+                                            <FormControl required type="input" placeholder="Enter Sygma Id" className={styles[`input_row_value`]}
+                                            onChange={(e)=>handleSigmaId(e)} id="sigmaId"></FormControl>
+                                        </OverlayTrigger>
+                                        {feedback ? <Feedback tooltip type="valid" className={styles[`input_tooltip_good`]}>Looks Good!</Feedback> : <></> }
+                                        {feedback ? <Feedback tooltip type="invalid" className={styles[`input_tooltip`]}>Enter Value</Feedback>: <></>}
+                                    </FormGroup>
+                                </Col>
+                            </Row>
+                        </Col>
+
+                        <Col xs={12} sm={12} md={12} lg={6} xl={4} xxl={4}>
+                            <Row className={styles[`form_row`]}>
+                                <Col xs={12} sm={6}>
+                                    <FormLabel className={styles[`input_label`]}>Sygma Status</FormLabel>
+                                </Col>
+                                <Col xs={12} sm={6}>
+                                    <FormGroup className={styles[`input_row`]}>
+                                        <OverlayTrigger placement="bottom" overlay={sigmaStatusToolTip}>
+                                            <FormControl required type="input" placeholder="Enter Sygma Status" className={styles[`input_row_value`]}
+                                            onChange={(e)=>handleSigmaStatus(e)} id="sigmaStatus"></FormControl>
+                                        </OverlayTrigger>
+                                        {feedback ? <Feedback tooltip type="valid" className={styles[`input_tooltip_good`]}>Looks Good!</Feedback> : <></> }
+                                        {feedback ? <Feedback tooltip type="invalid" className={styles[`input_tooltip`]}>Enter Value</Feedback>: <></>}
+                                    </FormGroup>
+                                </Col>
+                            </Row>
+                        </Col>
+
+                        <Col xs={12} sm={12} md={6} lg={6} xl={4} xxl={4}>
+                            <Row className={styles[`form_row`]}>
+                                <Col xs={12} sm={6} >
+                                    <FormLabel className={styles[`input_label`]}>Iboh Status</FormLabel>
+                                </Col>
+                                <Col xs={12} sm={6} >
+                                    <FormGroup className={styles[`input_row`]}>
+                                        <OverlayTrigger placement="bottom" overlay={iohStatusToolTip}>
+                                            <FormControl required type="input" placeholder="Enter iboh status" className={styles[`input_row_value`]}
+                                            onChange={(e)=>handleIbohStatus(e)} id="ibohStatus"></FormControl>
+                                        </OverlayTrigger>
+                                        {feedback ? <Feedback tooltip type="valid" className={styles[`input_tooltip_good`]}>Looks Good!</Feedback> : <></> }
+                                        {feedback ? <Feedback tooltip type="invalid" className={styles[`input_tooltip`]}>Enter Value</Feedback>: <></>}
+                                    </FormGroup>
+                                </Col>
+                            </Row>
+                        </Col>
+                    </Row>
                     <Row>
                         <Col xs={12} sm={12} md={12} lg={12} xl={12} xxl={12} className={styles[`onHandInventory`]}>
                             ON-HAND INVENTORY
@@ -972,91 +1135,19 @@ function AddInventory() {
                                 </Col>
                             </Row>
                         </Col>
-                        <Col xs={12} sm={12} md={6} lg={6} xl={4} xxl={4}>
-                            <Row className={styles[`form_row`]}>
-                                <Col xs={12} sm={6} >
-                                    <FormLabel className={styles[`input_label`]}>Unlock</FormLabel>
-                                </Col>
-                                <Col xs={12} sm={6} >
-                                    <FormGroup className={styles[`input_row`]}>
-                                        <OverlayTrigger placement="bottom" overlay={unlockToolTip}>
-                                            <FormControl required type="input" placeholder="Enter Unlock" className={styles[`input_row_value`]}
-                                            onChange={(e)=>handleUnlock(e)} id="unlock"></FormControl>
-                                        </OverlayTrigger>
-                                        {feedback ? <Feedback tooltip type="valid" className={styles[`input_tooltip_good`]}>Looks Good!</Feedback> : <></> }
-                                        {feedback ? <Feedback tooltip type="invalid" className={styles[`input_tooltip`]}>Enter Value</Feedback>: <></>}
-                                    </FormGroup>
-                                </Col>
-                            </Row>
-                        </Col>
-                    </Row>
-                    <Row className={styles['field_rows']}>
-                        <Col xs={12} sm={12} md={6} lg={6} xl={4} xxl={4}>
+                        <Col>
                             <Row className={styles['form_row']}>
                                 <Col xs={12} sm={6}>
-                                    <FormLabel className={styles['input_label']}>oz to lbs</FormLabel>
+                                    <FormLabel className={styles[`input_label`]}>Grams</FormLabel>
                                 </Col>
                                 <Col xs={12} sm={6}>
                                     <FormGroup className={styles['input_row']}>
-                                        <OverlayTrigger placement="bottom" overlay={ozToLbsTooltip}>
-                                            <FormControl required type="number" placeholder="Enter oz to lbs value" className={styles['input_row_value']}
-                                            onChange={(e) => handleOzToLBS(e)} id="ozToLBS"></FormControl>
+                                        <OverlayTrigger placement="bottom" overlay={gramToolTip}>
+                                            <FormControl required type="number" placeholder="Enter Grams" className={styles[`input_row_value`]}
+                                            onChange={(e)=>handleGrams(e)} id="grams"></FormControl>
                                         </OverlayTrigger>
-                                        {feedback ? <Feedback tooltip type="valid" className={styles['input_tooltip_good']}>Looks Good!</Feedback>: <></>}
-                                        {feedback ? <Feedback tooltip type="invalid" className={styles['input_tooltip']}>Enter Value</Feedback>: <></>}
-                                    </FormGroup>
-                                </Col>
-                            </Row>
-                        </Col>
-                        <Col xs={12} sm={12} md={6} lg={6} xl={4} xxl={4}>
-                            <Row className={styles['form_row']}>
-                                <Col xs={12} sm={6}>
-                                    <FormLabel className={styles['input_label']}>ml to oz</FormLabel>
-                                </Col>
-                                <Col xs={12} sm={6}>
-                                    <FormGroup className={styles['input_row']}>
-                                        <OverlayTrigger placement="bottom" overlay={mlToOzToolTip}>
-                                            <FormControl required type="number" placeholder="Enter ML to OZ value" className={styles['input_row_value']}
-                                            onChange={(e) => handleMlToOz(e)} id="mltooz"></FormControl>
-                                        </OverlayTrigger>
-                                        {feedback ? <Feedback  tooltip type="valid" className={styles['input_tooltip_good']}>Looks Good!</Feedback> : <></>}
-                                        {feedback ? <Feedback  tooltip type="invalid" className={styles['input_tooltip_good']}>Enter Value</Feedback> : <></>}
-                                    </FormGroup>
-                                </Col>
-                            </Row>
-                        </Col>
-                        <Col xs={12} sm={12} md={6} lg={6} xl={4} xxl={4}>
-                            <Row className={styles['form_row']}>
-                                <Col xs={12} sm={6}>
-                                    <FormLabel className={styles['input_label']}>ltr to oz</FormLabel>
-                                </Col>
-                                <Col xs={12} sm={6}>
-                                    <FormGroup className={styles['input_row']}>
-                                        <OverlayTrigger placement="bottom" overlay={lttooztooltip}>
-                                            <FormControl required type="number" placeholder="Enter LT to OZ value" className={styles['input_row_value']}
-                                            onChange={(e) => handleLTtoOZ(e)} id="lttooz"></FormControl>
-                                        </OverlayTrigger>
-                                        {feedback ? <Feedback  tooltip type="valid" className={styles['input_tooltip_good']}>Looks Good!</Feedback> : <></>}
-                                        {feedback ? <Feedback  tooltip type="invalid" className={styles['input_tooltip_good']}>Enter Value</Feedback> : <></>}
-                                    </FormGroup>
-                                </Col>
-                            </Row>
-                        </Col>
-                    </Row>
-                    <Row className={styles['field_rows']}>
-                        <Col xs={12} sm={12} md={6} lg={6} xl={4} xxl={4}>
-                            <Row className={styles['form_row']}>
-                                <Col xs={12} sm={6}>
-                                    <FormLabel className={styles['input_label']}>ml to ltr</FormLabel>
-                                </Col>
-                                <Col xs={12} sm={6}>
-                                    <FormGroup className={styles['input_row']}>
-                                        <OverlayTrigger placement="bottom" overlay={mlToLtrToolTip}>
-                                            <FormControl required type="number" placeholder="Enter ml to l value" className={styles['input_row_value']}
-                                            onChange={(e) => handleMltoL(e)} id="mltoltr"></FormControl>
-                                        </OverlayTrigger>
-                                        {feedback ? <Feedback tooltip type="valid" className={styles['input_tooltip_good']}>Looks Good!</Feedback>: <></>}
-                                        {feedback ? <Feedback tooltip type="invalid" className={styles['input_tooltip']}>Enter Value</Feedback>: <></>}
+                                        {feedback ? <Feedback tooltip type="valid" className={styles[`input_tooltip_good`]}>Looks Good!</Feedback>:<></>}
+                                        {feedback ? <Feedback tooltip type="invalid" className={styles[`input_tooltip`]}>Enter Value</Feedback>:<></>}
                                     </FormGroup>
                                 </Col>
                             </Row>

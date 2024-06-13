@@ -8,6 +8,8 @@ import { useDispatch } from "react-redux";
 import {
     setTableData
 } from '../../app/dataReducer'
+import { excelTemp } from "./ExcelTemp";
+import FileSaver from "file-saver";
 
 function ImportExcelButton() {
     const shop = 'Panera';
@@ -32,11 +34,39 @@ function ImportExcelButton() {
         e.target.value=null
     }
 
+    const handleDownloadExcel = (e) => {
+        let dataToBlob = excelTemp;
+        let sliceSize = 1024;
+        let byteCharacters = atob(dataToBlob);
+        let bytesLength = byteCharacters.length;
+        let slicesCount = Math.ceil(bytesLength/sliceSize);
+        let byteArrays = new Array(slicesCount)
+        for (let sliceIndex=0;sliceIndex<slicesCount;++sliceIndex) {
+            let begin = sliceIndex * sliceSize;
+            let end= Math.min(begin+sliceSize,bytesLength)
+            let bytes= new Array(end-begin);
+            for(var offset=begin,i=0;offset<end;++i,++offset) {
+                bytes[i]=byteCharacters[offset].charCodeAt(0);
+            }
+            byteArrays[sliceIndex]=new Uint8Array(bytes);
+        }
+        let blob = new Blob(byteArrays,{type:"application/vnd.ms-excel"});
+        FileSaver.saveAs(new Blob([blob],{}),"sampleTemplate.csv");
+    }
+
     return(
         <React.Fragment>
             <Container>
                 <Row>
-                    <Col xl={{span:6,offset:6}}>
+                    <Col xl={5}>
+                        <Button onClick={(e)=>handleDownloadExcel(e)} className={`${styles[`${shop}_common_import_label`]}`}>
+                            <RiFileExcel2Line size={"1.4em"}
+                                className={`${styles[`${shop}_common_excel_icon`]}`}>
+                            </RiFileExcel2Line>
+                            Download CSV Template
+                        </Button>
+                    </Col>
+                    <Col xl={6}>
                         <Button className={`${styles[`${shop}_common_import_label`]}`} onClick={handleButtonClick}>
                             <RiFileExcel2Line  size={"1.4em"}
                                 className={`${styles[`${shop}_common_excel_icon`]}`}>

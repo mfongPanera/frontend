@@ -135,7 +135,7 @@ function Sidebar() {
                 }} className={`${visualizationTab ? styles[`${shop}_navbar_offcanvas_body_active`] : ""}
                                ${styles[`${shop}_navbar_offcanvas_body_nav`]}`}>
                   <Link className="nav-link" to={"/dashboard/visualization_view"}>
-                    Visualization
+                    Analytics
                   </Link>
                 </Nav.Link>
               </Nav>

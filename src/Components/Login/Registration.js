@@ -27,7 +27,7 @@ function Registration() {
     "Union Pizza": "UnionPizza",
     "Maryland Dairy": "MarylandDairy",
     "Coffee Bar": "CoffeeBar",
-    Subway: "Subway",
+    "Subway": "Subway",
   };
   const dispatch = useDispatch();
 

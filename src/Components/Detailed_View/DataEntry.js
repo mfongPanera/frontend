@@ -8,7 +8,7 @@ function DataEntry() {
   );
   const selectedDate = useSelector((state) => state.dataReducer.selectedDate);
   const selectedData = useSelector((state) => state.dataReducer.selectedData);
-  const selectedItem = useSelector((state) => state.dataReducer.selectedItem)
+  const selectedItem = useSelector((state) => state.dataReducer.selectedItem);
   return (
     <>
       {selectedLocation && (selectedDate || selectedItem) && selectedData? (

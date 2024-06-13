@@ -25,6 +25,7 @@ function ImportInventory() {
     }
     const handleInsertButtonClick = async ()=> {
       const dataToDB = createRequestBody()
+
       try {
         const response = await fetch(url,{
           method:'POST',
@@ -69,12 +70,15 @@ function ImportInventory() {
         data.location=item.Location.toString()
         data.unlock=item.Unlock.toString()
         data.userName=userName
-        data.ozToLBS=item.OztoLbs.toString()
-        data.mltooz=item.mltooz.toString()
-        data.lttooz=item.ltrtooz.toString()
-        data.mltol=item.mltoltr.toString()
+        data.category=item.Category.toString()
+        data.subCategory=item.Subcategory.toString()
+        data.grams=item.Gram.toString()
+        data.sygmaId = item.Sygma_ID.toString()
+        data.sygmaStatus = item.Sygma_Status.toString()
+        data.ibohStatus = item.Iboh_Status.toString()
         return data
       })
+      console.log(dataToDb)
       return dataToDb;
     }
 
